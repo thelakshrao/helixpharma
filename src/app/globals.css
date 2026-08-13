@@ -1,26 +1,26 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --paper: #f5f8fc;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html { scroll-behavior: smooth; }
+body { background: var(--paper); color: #071431; font-family: var(--font-body); }
+
+.font-display { font-family: var(--font-display); }
+.font-data { font-family: var(--font-data); font-variant-numeric: tabular-nums; }
+
+.hex-field {
+  background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.09) 1px, transparent 1.6px);
+  background-size: 26px 26px;
+}
+.hex-glow {
+  background:
+    radial-gradient(60% 60% at 78% 12%, rgba(69,201,242,0.28), transparent 60%),
+    radial-gradient(45% 45% at 8% 92%, rgba(47,123,238,0.22), transparent 60%);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@media (prefers-reduced-motion: no-preference) {
+  .rise { animation: rise 0.7s cubic-bezier(0.16,1,0.3,1) both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
 }
