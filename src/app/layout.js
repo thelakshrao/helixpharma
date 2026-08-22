@@ -1,7 +1,7 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Healix Pharmaceutical | Verify Your Product",
+  title: "Healix Pharmaceutical",
   description: "Verify the authenticity of your Healix Pharmaceutical product.",
 };
 
