@@ -23,8 +23,7 @@ export default function Navbar() {
       transition={{ duration: 0.7, ease: "easeOut" }}
       className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-6xl"
     >
-      <div className="flex items-center justify-between gap-6 px-5 py-2 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/30 shadow-2xl">
-        {/* Logo */}
+      <div className="flex items-center justify-between gap-6 px-5 py-2 rounded-2xl bg-black/20 backdrop-blur-xl border border-white/30 shadow-2xl">
         <Link href="/" className="flex items-center shrink-0">
           <Image
             src="/brand/healix-logo.png"
@@ -36,7 +35,6 @@ export default function Navbar() {
           />
         </Link>
 
-        {/* Center Nav Links */}
         <nav className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             <Link
@@ -49,17 +47,15 @@ export default function Navbar() {
           ))}
         </nav>
 
-        {/* Right Search Bar */}
         <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/30 focus-within:border-white/60 transition-colors">
           <Search size={15} className="text-white/70" />
           <input
             type="text"
-            placeholder="Search..."
+            placeholder="Search Products..."
             className="bg-transparent outline-none text-sm text-white placeholder-white/60 w-32 md:w-40"
           />
         </div>
 
-        {/* Mobile menu button */}
         <button
           onClick={() => setIsOpen((prev) => !prev)}
           className="md:hidden text-white z-50"
@@ -69,7 +65,6 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Mobile Dropdown */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -77,7 +72,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.98 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
-            className="md:hidden mt-2 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/30 shadow-2xl overflow-hidden"
+            className="md:hidden mt-2 rounded-2xl bg-black/20 backdrop-blur-xl border border-white/30 shadow-2xl overflow-hidden"
           >
             <nav className="flex flex-col p-4 gap-1">
               {navLinks.map((link) => (
@@ -91,12 +86,11 @@ export default function Navbar() {
                 </Link>
               ))}
 
-              {/* Search inside mobile menu */}
               <div className="flex items-center gap-2 mt-2 px-3 py-2 rounded-full bg-white/10 border border-white/30 focus-within:border-white/60 transition-colors">
                 <Search size={15} className="text-white/70" />
                 <input
                   type="text"
-                  placeholder="Search..."
+                  placeholder="Search Products..."
                   className="bg-transparent outline-none text-sm text-white placeholder-white/60 w-full"
                 />
               </div>
