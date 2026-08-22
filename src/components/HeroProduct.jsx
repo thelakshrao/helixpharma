@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 
 export default function HeroProduct() {
   return (
-    <section className="relative w-full bg-[#f8fafc] py-16 sm:py-20 md:py-28 px-6 sm:px-10 md:px-16 overflow-hidden">
+    <section className="relative w-full bg-[#f8fafc] py-16 sm:py-20 md:py-8 px-6 sm:px-10 md:px-16 overflow-hidden">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
         <motion.div
           initial={{ opacity: 0, x: -40 }}
