@@ -2,8 +2,19 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
-import { ShieldCheck, ScanLine, CheckCircle2, XCircle, KeyRound, AlertTriangle } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  ShieldCheck,
+  ScanLine,
+  CheckCircle2,
+  XCircle,
+  KeyRound,
+  AlertTriangle,
+  X,
+  FlaskConical,
+  Leaf,
+  Clock,
+} from "lucide-react";
 
 const infoCards = [
   {
@@ -23,10 +34,50 @@ const infoCards = [
   },
 ];
 
+const resultConfig = {
+  valid: {
+    icon: CheckCircle2,
+    accent: "text-blue-600",
+    badgeBg: "bg-blue-50",
+    badgeBorder: "border-blue-100",
+    title: "Genuine Product",
+    subtitle: "Your product has been successfully verified.",
+    note: "Thank you for choosing Healix Pharmaceutical. This product is authentic.",
+  },
+  already_used: {
+    icon: AlertTriangle,
+    accent: "text-amber-600",
+    badgeBg: "bg-amber-50",
+    badgeBorder: "border-amber-100",
+    title: "Already Verified",
+    subtitle: "This code has already been used before.",
+    note: "If you didn't scratch this code yourself, please don't use this product and contact us.",
+  },
+  invalid: {
+    icon: XCircle,
+    accent: "text-red-600",
+    badgeBg: "bg-red-50",
+    badgeBorder: "border-red-100",
+    title: "Invalid Code",
+    subtitle: "We couldn't verify this code.",
+    note: "Please double-check the code, or contact our support team before using this product.",
+  },
+  error: {
+    icon: XCircle,
+    accent: "text-red-600",
+    badgeBg: "bg-red-50",
+    badgeBorder: "border-red-100",
+    title: "Something Went Wrong",
+    subtitle: "Please try again in a moment.",
+    note: "If this keeps happening, reach out to our support team for help.",
+  },
+};
+
 export default function Verify() {
   const [code, setCode] = useState("");
   const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,11 +86,33 @@ export default function Verify() {
     setLoading(true);
     setStatus(null);
 
-    setTimeout(() => {
+    try {
+      const res = await fetch("/api/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code }),
+      });
+      const data = await res.json();
+      setStatus(data.status);
+      setShowModal(true);
+    } catch {
+      setStatus("error");
+      setShowModal(true);
+    } finally {
       setLoading(false);
-      setStatus(code.trim().length >= 6 ? "valid" : "invalid");
-    }, 1200);
+    }
   };
+
+  const result = status ? resultConfig[status] : null;
+  const ResultIcon = result?.icon;
+  const isValid = status === "valid";
+  const verifiedOn = new Date().toLocaleString("en-US", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
   return (
     <section className="relative w-full min-h-[90vh] flex items-center overflow-hidden px-4 sm:px-8 md:px-16 py-24">
@@ -81,7 +154,8 @@ export default function Verify() {
             transition={{ duration: 0.7, ease: "easeOut", delay: 0.2 }}
             className="text-sm sm:text-base text-white/80 max-w-md mb-8 leading-relaxed"
           >
-            Every genuine Healix Pharma product carries a unique scratch code. Verify it here to confirm your product is 100% authentic.
+            Every genuine Healix Pharma product carries a unique scratch code.
+            Verify it here to confirm your product is 100% authentic.
           </motion.p>
 
           <motion.form
@@ -112,31 +186,6 @@ export default function Verify() {
               {loading ? "Checking..." : "Verify Now"}
             </motion.button>
           </motion.form>
-
-          {status && (
-            <motion.div
-              initial={{ opacity: 0, y: 10, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              className={`mt-5 flex items-center gap-2 px-5 py-3 rounded-full text-sm font-medium ${
-                status === "valid"
-                  ? "bg-green-500/20 text-green-300 border border-green-400/30"
-                  : "bg-red-500/20 text-red-300 border border-red-400/30"
-              }`}
-            >
-              {status === "valid" ? (
-                <>
-                  <CheckCircle2 size={18} />
-                  This product is genuine.
-                </>
-              ) : (
-                <>
-                  <XCircle size={18} />
-                  Invalid code. Please check and try again.
-                </>
-              )}
-            </motion.div>
-          )}
         </div>
 
         <div className="flex flex-col gap-4">
@@ -155,14 +204,213 @@ export default function Verify() {
                   <Icon className="text-white" size={20} />
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold text-base mb-1">{card.title}</h3>
-                  <p className="text-white/70 text-sm leading-relaxed">{card.desc}</p>
+                  <h3 className="text-white font-semibold text-base mb-1">
+                    {card.title}
+                  </h3>
+                  <p className="text-white/70 text-sm leading-relaxed">
+                    {card.desc}
+                  </p>
                 </div>
               </motion.div>
             );
           })}
         </div>
       </div>
+
+      <AnimatePresence>
+        {showModal && result && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-100 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 py-8"
+            onClick={() => setShowModal(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.92, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.92, y: 20 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-3xl bg-white rounded-3xl overflow-hidden shadow-2xl grid grid-cols-1 md:grid-cols-[280px_1fr]"
+            >
+              <button
+                onClick={() => setShowModal(false)}
+                className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 text-white transition"
+              >
+                <X size={16} />
+              </button>
+
+              <div className="relative bg-black/80 px-8 py-10 flex flex-col items-center text-center overflow-hidden">
+                <Image
+                  src="/brand/lab.png"
+                  alt=""
+                  fill
+                  className="object-cover opacity-25 z-0"
+                />
+                <div className="absolute inset-0 bg-linear-to-b z-0" />
+
+                <div className="relative z-10 flex flex-col items-center text-center w-full">
+                  <div className="w-24 h-24 rounded-full bg-white/10 backdrop-blur-xl border border-white/30 flex items-center justify-center mb-4">
+                    <Image
+                      src="/brand/healix-logo.png"
+                      alt="Healix Pharma logo"
+                      width={64}
+                      height={64}
+                      className="object-contain"
+                    />
+                  </div>
+                  <h3 className="text-white text-xl font-bold leading-snug">
+                    HEALIX
+                  </h3>
+                  <p className="text-white/80 text-xs uppercase tracking-widest mb-6">
+                    Pharmaceutical
+                  </p>
+
+                  <p className="text-white font-semibold text-sm mb-1">
+                    100% Pure.
+                  </p>
+                  <p className="text-white/80 text-sm mb-8">Always Trusted.</p>
+
+                  <div className="w-full border-t border-white/20 mb-6" />
+
+                  <div className="flex flex-col gap-4 w-full text-left">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-white/10 border border-white/25 flex items-center justify-center shrink-0">
+                        <ShieldCheck size={15} className="text-white" />
+                      </div>
+                      <div>
+                        <p className="text-white text-xs font-semibold">
+                          100% Authentic
+                        </p>
+                        <p className="text-white/60 text-[11px]">
+                          Genuine product guaranteed
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-white/10 border border-white/25 flex items-center justify-center shrink-0">
+                        <FlaskConical size={15} className="text-white" />
+                      </div>
+                      <div>
+                        <p className="text-white text-xs font-semibold">
+                          Lab Tested
+                        </p>
+                        <p className="text-white/60 text-[11px]">
+                          Advanced quality assurance
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-white/10 border border-white/25 flex items-center justify-center shrink-0">
+                        <Leaf size={15} className="text-white" />
+                      </div>
+                      <div>
+                        <p className="text-white text-xs font-semibold">
+                          Research Grade
+                        </p>
+                        <p className="text-white/60 text-[11px]">
+                          For laboratory use only
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <p className="text-white/70 italic text-xs mt-8">
+                    Your health, our promise!
+                  </p>
+                </div>
+              </div>
+
+              <div className="px-6 sm:px-8 py-8">
+                <div className="flex items-start justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className={`w-11 h-11 rounded-full flex items-center justify-center border ${result.badgeBg} ${result.badgeBorder}`}
+                    >
+                      <ResultIcon size={22} className={result.accent} />
+                    </div>
+                    <div>
+                      <h2 className={`text-lg font-bold ${result.accent}`}>
+                        {result.title}
+                      </h2>
+                      <p className="text-slate-500 text-sm">
+                        {result.subtitle}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-slate-100 divide-y divide-slate-100 overflow-hidden mb-6">
+                  <div className="flex items-center justify-between px-4 py-3 bg-slate-50/50">
+                    <span className="flex items-center gap-2 text-slate-500 text-sm">
+                      <ShieldCheck size={14} /> Verification Code
+                    </span>
+                    <span className="text-slate-900 font-semibold text-sm tracking-wide">
+                      {code.trim().toUpperCase() || "—"}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between px-4 py-3">
+                    <span className="flex items-center gap-2 text-slate-500 text-sm">
+                      <ScanLine size={14} /> Scan Status
+                    </span>
+                    <span
+                      className={`flex items-center gap-1 font-semibold text-sm ${
+                        isValid
+                          ? "text-green-600"
+                          : status === "already_used"
+                            ? "text-amber-600"
+                            : "text-red-600"
+                      }`}
+                    >
+                      {isValid
+                        ? "First Scan"
+                        : status === "already_used"
+                          ? "Already Scanned"
+                          : "Not Found"}
+                      <ResultIcon size={14} />
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between px-4 py-3 bg-slate-50/50">
+                    <span className="flex items-center gap-2 text-slate-500 text-sm">
+                      <Clock size={14} /> Verify On
+                    </span>
+                    <span className="text-slate-900 font-semibold text-sm">
+                      {verifiedOn}
+                    </span>
+                  </div>
+                </div>
+
+                <div
+                  className={`flex items-start gap-3 rounded-2xl border px-4 py-4 mb-6 ${result.badgeBg} ${result.badgeBorder}`}
+                >
+                  <ShieldCheck
+                    size={18}
+                    className={`mt-0.5 shrink-0 ${result.accent}`}
+                  />
+                  <p
+                    className={`text-sm font-medium leading-relaxed ${result.accent}`}
+                  >
+                    {result.note}
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="w-full py-3 rounded-xl bg-slate-900 text-white text-sm font-semibold hover:bg-slate-800 transition"
+                >
+                  Close
+                </button>
+
+                <p className="text-center text-slate-500 text-[11px] mt-4">
+                  © 2026 Healix Pharmaceutical. All Rights Reserved.
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
