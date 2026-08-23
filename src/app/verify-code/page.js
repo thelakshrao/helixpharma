@@ -11,7 +11,9 @@ export default function VerifyCodePage() {
       <Suspense fallback={<p className="text-center py-10">Loading verification...</p>}>
         <Verify />
       </Suspense>
-      <LandingPageProduct />
+      <Suspense fallback={null}>
+        <LandingPageProduct />
+      </Suspense>
       <Footer />
     </main>
   );
