@@ -146,13 +146,16 @@ export default function Verify() {
   });
 
   return (
-    <section id="verify" className="relative w-full min-h-[90vh] flex items-center overflow-hidden px-4 sm:px-8 md:px-16 py-24">
+    <section
+      id="verify"
+      className="relative w-full min-h-screen sm:min-h-[90vh] flex items-center overflow-hidden px-4 sm:px-8 md:px-16 pt-32 pb-16 sm:py-24"
+    >
       <Image
         src="/brand/verify.png"
         alt="Verify Healix Pharma product"
         fill
         priority
-        className="object-cover object-center -z-10"
+        className="object-cover object-[70%_center] sm:object-center -z-10"
       />
 
       <div className="absolute inset-0 bg-black/55 -z-10" />

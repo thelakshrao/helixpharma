@@ -3,31 +3,54 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { ShieldCheck, FlaskConical, BadgeCheck } from "lucide-react";
+
+const trustPoints = [
+  { icon: ShieldCheck, label: "Clinically tested" },
+  { icon: FlaskConical, label: "Quality checked" },
+  { icon: BadgeCheck, label: "100% purity" },
+];
 
 export default function HeroProduct() {
   return (
-    <section className="relative w-full bg-[#f8fafc] py-16 sm:py-20 md:py-8 px-6 sm:px-10 md:px-16 overflow-hidden">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
+    <section className="relative w-full bg-[#f8fafc] py-10 sm:py-16 md:py-8 px-6 sm:px-10 md:px-16 overflow-hidden">
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.04]"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle, #1e293b 1px, transparent 1px)",
+          backgroundSize: "28px 28px",
+        }}
+      />
+      <div className="pointer-events-none absolute -top-32 -right-32 w-96 h-96 rounded-full bg-blue-300/20 blur-3xl" />
+
+      <div className="relative max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
         <motion.div
-          initial={{ opacity: 0, x: -40 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ amount: 0.3 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
           className="relative w-full h-70 sm:h-95 md:h-115 rounded-3xl overflow-hidden"
         >
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <div className="w-2/3 h-2/3 rounded-full bg-blue-400/30 blur-[60px]" />
+          </div>
+
           <Image
             src="/brand/hero.png"
             alt="Healix Pharma product"
             fill
-            className="object-cover"
+            className="object-cover relative"
           />
+
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-linear-to-t from-black/20 to-transparent" />
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, x: 40 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ amount: 0.3 }}
-          transition={{ duration: 0.8, ease: "easeOut", delay: 0.15 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
           className="flex flex-col rounded-3xl p-6 sm:p-8 md:p-10"
         >
           <div className="flex items-center gap-2 mb-4">
@@ -37,22 +60,40 @@ export default function HeroProduct() {
             </p>
           </div>
 
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 leading-snug mb-5">
-            Crafted with precision, backed by science.
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 leading-[1.15] tracking-tight mb-5">
+            Crafted with <span className="text-blue-400">precision</span>,
+            <br className="hidden sm:block" /> backed by science.
           </h2>
 
           <p className="text-sm sm:text-base md:text-lg text-slate-600 leading-relaxed mb-3">
             Every Healix Pharma product is manufactured under strict quality control, ensuring{" "}
             <span className="text-blue-400 font-semibold">100% purity</span> you can rely on.
           </p>
-          <p className="text-sm sm:text-base md:text-lg text-slate-600 leading-relaxed mb-8">
+          <p className="text-sm sm:text-base md:text-lg text-slate-600 leading-relaxed mb-6">
             From research-grade compounds to advanced formulations, we combine cutting-edge technology with rigorous testing to deliver products that meet the highest industry standards, every single time.
           </p>
 
-          <div className="flex justify-start md:justify-end">
+          <div className="flex flex-wrap gap-4 sm:gap-6 mb-8">
+            {trustPoints.map(({ icon: Icon, label }) => (
+              <div key={label} className="flex items-center gap-2">
+                <Icon className="w-4 h-4 text-blue-400" strokeWidth={2} />
+                <span className="text-xs sm:text-sm font-medium text-slate-700">
+                  {label}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex flex-wrap items-center gap-4 justify-start md:justify-end">
+            <Link
+              href="/product#benefits"
+              className="text-sm font-medium text-slate-600 hover:text-blue-500 transition-colors"
+            >
+              See Benefits
+            </Link>
             <Link
               href="/product"
-              className="group inline-flex items-center gap-2 px-6 py-3 bg-blue-400 text-white text-sm font-medium rounded-full hover:bg-blue-500 transition-colors"
+              className="group inline-flex items-center gap-2 px-7 py-3.5 bg-blue-400 text-white text-sm font-semibold rounded-full shadow-lg shadow-blue-500/25 hover:bg-blue-500 hover:shadow-blue-500/40 transition-all"
             >
               View All Products
               <svg

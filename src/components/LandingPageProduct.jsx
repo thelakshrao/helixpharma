@@ -44,7 +44,7 @@ export default function LandingPageProduct() {
   return (
     <section
       id="our-research-peptides"
-      className="relative w-full bg-[#f8fafc] py-4 sm:py-10 md:py-10 px-4 sm:px-8 md:px-16"
+      className="relative w-full bg-[#f8fafc] py-8 sm:py-10 md:py-10 px-4 sm:px-8 md:px-16 scroll-mt-24 sm:scroll-mt-28"
     >
       <div className="max-w-6xl mx-auto">
         <div className="flex items-center gap-2 mb-3">
@@ -89,7 +89,7 @@ export default function LandingPageProduct() {
               onClick={() => setSelected(p)}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ amount: 0.2 }}
+              viewport={{ once: true, amount: 0.1 }}
               transition={{
                 duration: 0.5,
                 ease: "easeOut",
@@ -212,12 +212,6 @@ export default function LandingPageProduct() {
                 <p className="text-slate-600 text-sm leading-relaxed mb-6">
                   {selected.about}
                 </p>
-
-                <div className="rounded-xl bg-slate-50 border border-slate-100 px-4 py-3 mb-6">
-                  <p className="text-slate-500 text-xs">
-                    For research use only. Not for human consumption.
-                  </p>
-                </div>
 
                 <button
                   onClick={() => setSelected(null)}

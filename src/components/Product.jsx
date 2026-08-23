@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -113,6 +114,18 @@ const products = [
   },
 ];
 
+const heroImages = [
+  "/brand/herop1.png",
+  "/brand/herop2.png",
+  "/brand/herop3.png",
+  "/brand/herop4.png",
+  "/brand/herop5.png",
+  "/brand/herop6.png",
+  "/brand/herop7.png",
+  "/brand/herop8.png",
+  "/brand/herop9.png",
+];
+
 function shuffle(array) {
   const arr = [...array];
   for (let i = arr.length - 1; i > 0; i--) {
@@ -129,28 +142,54 @@ function buildItems() {
   ]);
 }
 
+function buildAllItems() {
+  return products.map((p, i) => ({
+    ...p,
+    variant: "all",
+    image: heroImages[i],
+    key: `${p.id}-all`,
+  }));
+}
+
 const PAGE_SIZE = 6;
 
-export default function Product() {
+function ProductContent() {
+  const searchParams = useSearchParams();
+  const initialPack = searchParams.get("pack");
+
   const [query, setQuery] = useState("");
-  const [comboOnly, setComboOnly] = useState(false);
+  const [packFilter, setPackFilter] = useState(initialPack || "all");
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState(null);
   const [allItems, setAllItems] = useState(buildItems);
+  const [allViewItems, setAllViewItems] = useState(buildAllItems);
 
   useEffect(() => {
     setAllItems(shuffle(buildItems()));
+    setAllViewItems(shuffle(buildAllItems()));
   }, []);
 
+  useEffect(() => {
+    if (initialPack) setPackFilter(initialPack);
+  }, [initialPack]);
+
   const filtered = useMemo(() => {
+    if (packFilter === "all") {
+      return allViewItems.filter((item) =>
+        item.name.toLowerCase().includes(query.toLowerCase().trim()),
+      );
+    }
     return allItems.filter((item) => {
       const matchesQuery = item.name
         .toLowerCase()
         .includes(query.toLowerCase().trim());
-      const matchesCombo = comboOnly ? item.variant === "combo" : true;
-      return matchesQuery && matchesCombo;
+      const matchesPack =
+        packFilter === "1"
+          ? item.variant === "single"
+          : item.variant === "combo";
+      return matchesQuery && matchesPack;
     });
-  }, [query, comboOnly, allItems]);
+  }, [query, packFilter, allItems, allViewItems]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const pageItems = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
@@ -159,6 +198,12 @@ export default function Product() {
     if (p < 1 || p > totalPages) return;
     setPage(p);
   };
+
+  const packOptions = [
+    { value: "all", label: "All" },
+    { value: "1", label: "Pack of 1" },
+    { value: "3", label: "Pack of 3" },
+  ];
 
   return (
     <>
@@ -223,18 +268,24 @@ export default function Product() {
               />
             </div>
 
-            <label className="flex items-center gap-2 text-sm text-slate-600 cursor-pointer select-none">
-              <input
-                type="checkbox"
-                checked={comboOnly}
-                onChange={(e) => {
-                  setComboOnly(e.target.checked);
-                  setPage(1);
-                }}
-                className="w-4 h-4 accent-blue-500 rounded"
-              />
-              Combo products only
-            </label>
+            <div className="flex items-center gap-2">
+              {packOptions.map((opt) => (
+                <button
+                  key={opt.value}
+                  onClick={() => {
+                    setPackFilter(opt.value);
+                    setPage(1);
+                  }}
+                  className={`px-4 py-2 rounded-full text-sm font-medium border transition ${
+                    packFilter === opt.value
+                      ? "bg-slate-900 text-white border-slate-900"
+                      : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
           </div>
 
           {pageItems.length === 0 ? (
@@ -266,8 +317,8 @@ export default function Product() {
                         className="object-cover object-center scale-100 group-hover:scale-105 transition-transform duration-300"
                       />
                       {item.variant === "combo" && (
-                        <span className="absolute top-3 left-3 text-[10px] font-semibold uppercase tracking-wide bg-blue-500 text-white px-2.5 py-1 rounded-full">
-                          Combo
+                        <span className="absolute top-3 left-3 text-[10px] font-semibold uppercase tracking-wide bg-white text-black px-2.5 py-1 rounded-full">
+                          Pack of 3
                         </span>
                       )}
                     </div>
@@ -401,5 +452,13 @@ export default function Product() {
         )}
       </AnimatePresence>
     </>
+  );
+}
+
+export default function Product() {
+  return (
+    <Suspense fallback={null}>
+      <ProductContent />
+    </Suspense>
   );
 }
