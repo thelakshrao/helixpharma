@@ -4,6 +4,8 @@ import HeroProduct from "@/components/HeroProduct";
 import Bodybuilding from "@/components/Bodybuilding";
 import Verify from "@/components/Verify";
 import Footer from "@/components/Footer";
+import { Suspense } from "react";
+import LandingPageProduct from "@/components/LandingPageProduct";
 
 export default function Home() {
   return (
@@ -11,6 +13,9 @@ export default function Home() {
       <Navbar />
       <Hero />
       <HeroProduct />
+      <Suspense fallback={null}>
+        <LandingPageProduct />
+      </Suspense>
       <Bodybuilding />
       <Verify />
       <Footer />

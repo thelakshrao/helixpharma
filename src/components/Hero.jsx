@@ -41,7 +41,10 @@ export default function Hero() {
   }, []);
 
   return (
-    <section id="hero" className="relative w-full h-[85vh] sm:h-[85vh] md:h-[95vh] overflow-hidden">
+    <section
+      id="hero"
+      className="relative w-full h-[85vh] sm:h-[85vh] md:h-[95vh] overflow-hidden"
+    >
       <AnimatePresence mode="sync">
         <motion.div
           key={slides[index].image}
@@ -134,6 +137,12 @@ export default function Hero() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.7 }}
+          onClick={() => {
+            document.getElementById("verify")?.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }}
           className="mt-4 px-5 py-2 bg-white text-gray-900 text-sm font-medium rounded-full hover:bg-gray-100 transition cursor-pointer"
         >
           Verify Authenticity
