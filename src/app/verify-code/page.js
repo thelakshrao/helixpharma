@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Footer from "@/components/Footer";
 import LandingPageProduct from "@/components/LandingPageProduct";
 import Navbar from "@/components/Navbar";
@@ -7,7 +8,9 @@ export default function VerifyCodePage() {
   return (
     <main>
       <Navbar />
-      <Verify />
+      <Suspense fallback={<p className="text-center py-10">Loading verification...</p>}>
+        <Verify />
+      </Suspense>
       <LandingPageProduct />
       <Footer />
     </main>
