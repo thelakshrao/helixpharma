@@ -11,6 +11,7 @@ import {
   X,
   ShieldCheck,
 } from "lucide-react";
+import { products as allProductsData } from "@/data/products";
 
 const products = [
   {
@@ -114,18 +115,6 @@ const products = [
   },
 ];
 
-const heroImages = [
-  "/brand/herop1.png",
-  "/brand/herop2.png",
-  "/brand/herop3.png",
-  "/brand/herop4.png",
-  "/brand/herop5.png",
-  "/brand/herop6.png",
-  "/brand/herop7.png",
-  "/brand/herop8.png",
-  "/brand/herop9.png",
-];
-
 function shuffle(array) {
   const arr = [...array];
   for (let i = arr.length - 1; i > 0; i--) {
@@ -143,10 +132,9 @@ function buildItems() {
 }
 
 function buildAllItems() {
-  return products.map((p, i) => ({
+  return allProductsData.map((p) => ({
     ...p,
     variant: "all",
-    image: heroImages[i],
     key: `${p.id}-all`,
   }));
 }
