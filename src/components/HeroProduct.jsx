@@ -4,14 +4,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ShieldCheck, FlaskConical, BadgeCheck } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 const trustPoints = [
-  { icon: ShieldCheck, label: "Clinically tested" },
-  { icon: FlaskConical, label: "Quality checked" },
-  { icon: BadgeCheck, label: "100% purity" },
+  { icon: ShieldCheck, key: "clinicallyTested" },
+  { icon: FlaskConical, key: "qualityChecked" },
+  { icon: BadgeCheck, key: "purity" },
 ];
 
 export default function HeroProduct() {
+  const { t } = useLanguage();
+
   return (
     <section className="relative w-full bg-[#f8fafc] py-10 sm:py-16 md:py-8 px-6 sm:px-10 md:px-16 overflow-hidden">
       <div
@@ -61,24 +64,26 @@ export default function HeroProduct() {
           </div>
 
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 leading-[1.15] tracking-tight mb-5">
-            Crafted with <span className="text-blue-400">precision</span>,
-            <br className="hidden sm:block" /> backed by science.
+            {t("heroProduct.headingPart1")}{" "}
+            <span className="text-blue-400">{t("heroProduct.headingHighlight1")}</span>,
+            <br className="hidden sm:block" /> {t("heroProduct.headingPart2")}
           </h2>
 
           <p className="text-sm sm:text-base md:text-lg text-slate-600 leading-relaxed mb-3">
-            Every Healix Pharma product is manufactured under strict quality control, ensuring{" "}
-            <span className="text-blue-400 font-semibold">100% purity</span> you can rely on.
+            {t("heroProduct.paragraph1Part1")}{" "}
+            <span className="text-blue-400 font-semibold">{t("heroProduct.purityHighlight")}</span>{" "}
+            {t("heroProduct.paragraph1Part2")}
           </p>
           <p className="text-sm sm:text-base md:text-lg text-slate-600 leading-relaxed mb-6">
-            From research-grade compounds to advanced formulations, we combine cutting-edge technology with rigorous testing to deliver products that meet the highest industry standards, every single time.
+            {t("heroProduct.paragraph2")}
           </p>
 
           <div className="flex flex-wrap gap-4 sm:gap-6 mb-8">
-            {trustPoints.map(({ icon: Icon, label }) => (
-              <div key={label} className="flex items-center gap-2">
+            {trustPoints.map(({ icon: Icon, key }) => (
+              <div key={key} className="flex items-center gap-2">
                 <Icon className="w-4 h-4 text-blue-400" strokeWidth={2} />
                 <span className="text-xs sm:text-sm font-medium text-slate-700">
-                  {label}
+                  {t(`heroProduct.trust.${key}`)}
                 </span>
               </div>
             ))}
@@ -89,13 +94,13 @@ export default function HeroProduct() {
               href="/product#benefits"
               className="text-sm font-medium text-slate-600 hover:text-blue-500 transition-colors"
             >
-              See Benefits
+              {t("heroProduct.seeBenefits")}
             </Link>
             <Link
               href="/product"
               className="group inline-flex items-center gap-2 px-7 py-3.5 bg-blue-400 text-white text-sm font-semibold rounded-full shadow-lg shadow-blue-500/25 hover:bg-blue-500 hover:shadow-blue-500/40 transition-all"
             >
-              View All Products
+              {t("heroProduct.viewAllProducts")}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4 transition-transform group-hover:translate-x-1"

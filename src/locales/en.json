@@ -1,0 +1,171 @@
+{
+  "nav": {
+    "home": "Home",
+    "product": "Product",
+    "contact": "Contact",
+    "verifyCode": "Verify Code",
+    "calculator": "Calculator",
+    "categories": {
+      "injectables": "Injectables",
+      "orals": "Orals",
+      "peptides": "Peptides",
+      "sarms": "SARMs"
+    },
+    "back": "Back",
+    "packOf1": "Pack of 1",
+    "packOf3": "Pack of 3",
+    "searchPlaceholder": "Search Products...",
+    "comingSoonTitle": "Coming Soon",
+    "comingSoonDesc": "These products are currently in production and will be available shortly. Please check back soon.",
+    "gotIt": "Got it"
+  },
+  "hero": {
+    "slides": {
+      "slide1": "Push Beyond Limits",
+      "slide2": "Engineered To Perform",
+      "slide3": "Purity You Can Trust"
+    },
+    "description": "Lab-tested, pharmaceutical-grade compounds trusted by professionals worldwide.",
+    "trust": {
+      "purity": { "title": "99% Purity", "desc": "Third-party tested" },
+      "research": { "title": "Research Grade", "desc": "Lab use only" },
+      "coa": { "title": "COA Available", "desc": "Batch tested" },
+      "quality": { "title": "Quality Assured", "desc": "Every step checked" }
+    },
+    "brandLabel": "— HEALIX PHARMA",
+    "tagline": "Engineered for peak performance. Trusted by athletes who push their limits every single day.",
+    "verifyButton": "Verify Authenticity"
+  },
+  "heroProduct": {
+    "headingPart1": "Crafted with",
+    "headingHighlight1": "precision",
+    "headingPart2": "backed by science.",
+    "paragraph1Part1": "Every Healix Pharma product is manufactured under strict quality control, ensuring",
+    "purityHighlight": "100% purity",
+    "paragraph1Part2": "you can rely on.",
+    "paragraph2": "From research-grade compounds to advanced formulations, we combine cutting-edge technology with rigorous testing to deliver products that meet the highest industry standards, every single time.",
+    "trust": {
+      "clinicallyTested": "Clinically tested",
+      "qualityChecked": "Quality checked",
+      "purity": "100% purity"
+    },
+    "seeBenefits": "See Benefits",
+    "viewAllProducts": "View All Products"
+  },
+  "landingProduct": {
+    "eyebrow": "Our Research Peptides",
+    "heading": "Explore the Healix Pharma lineup.",
+    "close": "Close"
+  },
+  "bodybuilding": {
+    "eyebrow": "Built for the grind",
+    "heading": "Fuel your training, back your goals.",
+    "description": "Whether you're deep into a cutting cycle or chasing serious mass, Healix Pharma products are formulated for athletes and bodybuilders who demand purity, consistency, and results they can measure.",
+    "benefits": {
+      "recovery": {
+        "title": "Muscle recovery",
+        "desc": "Supports faster recovery between intense training sessions."
+      },
+      "energy": {
+        "title": "Peak energy",
+        "desc": "Formulated to help sustain energy through heavy lifting cycles."
+      },
+      "growth": {
+        "title": "Lean growth",
+        "desc": "Backed by research to support quality muscle development."
+      },
+      "labVerified": {
+        "title": "Lab verified",
+        "desc": "Every batch tested for purity above 99% before it reaches you."
+      }
+    },
+    "exploreProducts": "Explore Products"
+  },
+  "verify": {
+    "hero": {
+      "title": "Verify Your Product",
+      "description": "Every genuine Healix Pharma product carries a unique scratch code. Verify it here to confirm your product is 100% authentic.",
+      "inputPlaceholder": "Enter your code",
+      "checking": "Checking...",
+      "verifyButton": "Verify Now"
+    },
+    "infoCards": {
+      "locate": {
+        "title": "Locate the panel",
+        "desc": "Flip your box and find the silver scratch panel printed on the back label."
+      },
+      "reveal": {
+        "title": "Reveal the code",
+        "desc": "Gently scratch it off with a coin to reveal your unique verification code."
+      },
+      "oneTime": {
+        "title": "One-time use",
+        "desc": "Each code works only once. If it's already scratched at purchase, don't use the product."
+      }
+    },
+    "modal": {
+      "pharmaceutical": "Pharmaceutical",
+      "pureLine1": "100% Pure.",
+      "pureLine2": "Always Trusted.",
+      "authentic": {
+        "title": "100% Authentic",
+        "desc": "Genuine product guaranteed"
+      },
+      "labTested": {
+        "title": "Lab Tested",
+        "desc": "Advanced quality assurance"
+      },
+      "researchGrade": {
+        "title": "Research Grade",
+        "desc": "For laboratory use only"
+      },
+      "promise": "Your health, our promise!"
+    },
+    "result": {
+      "valid": {
+        "title": "Genuine Product",
+        "subtitle": "Your product has been successfully verified.",
+        "note": "Thank you for choosing Healix Pharmaceutical. This product is authentic."
+      },
+      "already_used": {
+        "title": "Already Verified",
+        "subtitle": "This code has already been used before.",
+        "note": "If you didn't scratch this code yourself, please don't use this product and contact us."
+      },
+      "invalid": {
+        "title": "Invalid Code",
+        "subtitle": "We couldn't verify this code.",
+        "note": "Please double-check the code, or contact our support team before using this product."
+      },
+      "error": {
+        "title": "Something Went Wrong",
+        "subtitle": "Please try again in a moment.",
+        "note": "If this keeps happening, reach out to our support team for help."
+      }
+    },
+    "details": {
+      "verificationCode": "Verification Code",
+      "scanStatus": "Scan Status",
+      "verifyOn": "Verify On",
+      "firstScan": "First Scan",
+      "alreadyScanned": "Already Scanned",
+      "notFound": "Not Found"
+    },
+    "close": "Close",
+    "copyright": "© 2026 Healix Pharmaceutical. All Rights Reserved."
+  },
+  "footer": {
+    "description": "Healix Pharma makes genuine products with 100% purity guaranteed. Verify your product by entering the code from the back of the box.",
+    "noteLabel": "Note:",
+    "noteText": "Do not use if the code is already scratched.",
+    "copyright": "Healix Pharma. All rights reserved."
+  },
+  "product": {
+    "hero": {
+      "eyebrow": "Products",
+      "quote": "\"Purity engineered for research, trusted by scientists worldwide.\""
+    },
+    "searchPlaceholder": "Search products...",
+    "noResults": "No products found matching your search."
+  }
+}

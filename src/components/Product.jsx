@@ -11,113 +11,11 @@ import {
   X,
   ShieldCheck,
 } from "lucide-react";
-import { products as allProductsData } from "@/data/products";
-
-const comboProducts = [
-  {
-    id: "ghk-cu",
-    name: "GHK-CU",
-    dose: "100 MG",
-    combo: "/brand/combo1.png",
-    short:
-      "A copper peptide widely studied for skin repair, collagen support, and tissue remodeling research.",
-    about:
-      "GHK-Cu is a naturally occurring copper-binding peptide studied extensively in dermatological and regenerative research. It is commonly used in laboratory studies exploring collagen synthesis, wound healing pathways, and antioxidant activity at the cellular level.",
-  },
-  {
-    id: "kisspeptine",
-    name: "KISSPEPTINE",
-    dose: "10 MG",
-    combo: "/brand/combo2.png",
-    short:
-      "A key regulatory peptide studied for its role in reproductive hormone signaling pathways.",
-    about:
-      "Kisspeptin is a neuropeptide central to the regulation of the hypothalamic-pituitary-gonadal axis. It is used in research settings to study reproductive hormone release, puberty onset mechanisms, and fertility-related signaling.",
-  },
-  {
-    id: "tesamorelin",
-    name: "TESAMORELIN",
-    dose: "10 MG",
-    combo: "/brand/combo3.png",
-    short:
-      "A growth hormone-releasing peptide studied for body composition and metabolic research.",
-    about:
-      "Tesamorelin is a synthetic analog of growth hormone-releasing hormone (GHRH), studied for its effects on growth hormone secretion, visceral fat metabolism, and body composition in clinical and laboratory research.",
-  },
-  {
-    id: "dsip",
-    name: "DSIP",
-    dose: "10 MG",
-    combo: "/brand/combo4.png",
-    short:
-      "Delta sleep-inducing peptide, researched for its role in sleep regulation and stress response studies.",
-    about:
-      "DSIP (Delta Sleep-Inducing Peptide) is a neuropeptide studied for its influence on sleep-wake cycles and stress hormone regulation. Researchers use it to explore mechanisms behind delta-wave sleep and neuroendocrine balance.",
-  },
-  {
-    id: "tb-500",
-    name: "TB-500",
-    dose: "5 MG",
-    combo: "/brand/combo5.png",
-    short:
-      "A synthetic fragment of Thymosin Beta-4, studied for tissue repair and recovery research.",
-    about:
-      "TB-500 is a synthetic peptide fragment derived from Thymosin Beta-4, studied for its potential role in cell migration, tissue regeneration, and recovery processes across various research models.",
-  },
-  {
-    id: "bpc-157",
-    name: "BPC-157",
-    dose: "10 MG",
-    combo: "/brand/combo6.png",
-    short:
-      "A stable gastric pentadecapeptide studied for tissue repair, gut health, and recovery research.",
-    about:
-      "BPC-157 is a synthetic peptide derived from a protein found in gastric juice, widely researched for its potential role in accelerating tissue repair, supporting the gut-healing process, and modulating inflammatory pathways in laboratory models.",
-  },
-  {
-    id: "mots-c",
-    name: "MOTS-C",
-    dose: "10 MG",
-    combo: "/brand/combo7.png",
-    short:
-      "A mitochondrial-derived peptide researched for metabolic regulation and cellular energy studies.",
-    about:
-      "MOTS-c is a mitochondrial-derived peptide studied for its role in regulating metabolic homeostasis, insulin sensitivity, and cellular energy production, making it a key focus in metabolic and longevity research.",
-  },
-  {
-    id: "retatrutide",
-    name: "RETATRUTIDE",
-    dose: "10 MG",
-    combo: "/brand/combo8.png",
-    short:
-      "A triple hormone receptor agonist studied for metabolic and weight regulation research.",
-    about:
-      "Retatrutide is a novel research peptide that acts on multiple hormone receptor pathways simultaneously. It is studied for its effects on metabolic regulation, appetite signaling, and weight-related research outcomes.",
-  },
-  {
-    id: "pt-141",
-    name: "PT-141",
-    dose: "10 MG",
-    combo: "/brand/combo9.png",
-    short:
-      "A melanocortin-based peptide studied for its role in central nervous system signaling research.",
-    about:
-      "PT-141 (Bremelanotide) is a peptide studied for its interaction with melanocortin receptors in the central nervous system, with research focused on its influence on neural signaling pathways.",
-  },
-  {
-    id: "klow-blend",
-    name: "KLOW BLEND",
-    dose: "80 MG",
-    combo: "/brand/combo10.png",
-    short:
-      "A specialized multi-peptide blend containing BPC157, TB500, GHK-CU, and KPV for advanced recovery research.",
-    about:
-      "KLOW Blend (80 MG total per vial) combines BPC-157 (10mg), TB-500 (10mg), GHK-Cu (50mg), and KPV (10mg) into a synergistic formulation designed for comprehensive cellular repair, anti-inflammatory, and tissue regeneration research.",
-  },
-];
+import { products as products, comboProducts } from "@/data/products";
+import { useLanguage } from "@/context/LanguageContext";
 
 function buildPack1Items() {
-  return allProductsData.map((p) => ({
+  return products.map((p) => ({
     ...p,
     variant: "single",
     image: p.image || p.single || p.combo,
@@ -137,6 +35,7 @@ function buildPack3Items() {
 const PAGE_SIZE = 6;
 
 function ProductContent() {
+  const { t, lang } = useLanguage();
   const searchParams = useSearchParams();
   const initialPack = searchParams.get("pack");
 
@@ -155,7 +54,7 @@ function ProductContent() {
   const filtered = useMemo(() => {
     const currentList = packFilter === "3" ? pack3Items : pack1Items;
     return currentList.filter((item) =>
-      item.name.toLowerCase().includes(query.toLowerCase().trim())
+      item.name.toLowerCase().includes(query.toLowerCase().trim()),
     );
   }, [query, packFilter, pack1Items, pack3Items]);
 
@@ -168,8 +67,8 @@ function ProductContent() {
   };
 
   const packOptions = [
-    { value: "1", label: "Pack of 1" },
-    { value: "3", label: "Pack of 3" },
+    { value: "1", labelKey: "packOf1" },
+    { value: "3", labelKey: "packOf3" },
   ];
 
   return (
@@ -186,7 +85,6 @@ function ProductContent() {
           className="object-cover object-center -z-10"
         />
         <div className="absolute inset-0 bg-black/55 -z-10" />
-
         <div className="relative z-10 text-center px-4">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -202,7 +100,7 @@ function ProductContent() {
             transition={{ duration: 0.7, ease: "easeOut", delay: 0.15 }}
             className="mt-3 text-sm sm:text-lg uppercase tracking-[0.3em] text-white/80 font-light"
           >
-            Products
+            {t("product.hero.eyebrow")}
           </motion.p>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -210,7 +108,7 @@ function ProductContent() {
             transition={{ duration: 0.7, ease: "easeOut", delay: 0.3 }}
             className="mt-5 text-white/90 text-sm sm:text-base italic max-w-xl mx-auto"
           >
-            "Purity engineered for research, trusted by scientists worldwide."
+            {t("product.hero.quote")}
           </motion.p>
         </div>
       </section>
@@ -230,7 +128,7 @@ function ProductContent() {
                   setQuery(e.target.value);
                   setPage(1);
                 }}
-                placeholder="Search products..."
+                placeholder={t("product.searchPlaceholder")}
                 className="w-full pl-10 pr-4 py-2.5 rounded-full border border-slate-200 bg-white text-sm text-slate-700 placeholder-slate-400 outline-none focus:border-blue-300 transition"
               />
             </div>
@@ -249,7 +147,7 @@ function ProductContent() {
                       : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
                   }`}
                 >
-                  {opt.label}
+                  {t(`nav.${opt.labelKey}`)}
                 </button>
               ))}
             </div>
@@ -257,7 +155,7 @@ function ProductContent() {
 
           {pageItems.length === 0 ? (
             <div className="text-center py-20 text-slate-400 text-sm">
-              No products found matching your search.
+              {t("product.noResults")}
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -294,7 +192,7 @@ function ProductContent() {
                         </span>
                       </div>
                       <p className="text-slate-500 text-sm leading-relaxed">
-                        {item.short}
+                        {item.short[lang]}
                       </p>
                     </div>
                   </motion.button>
@@ -312,7 +210,6 @@ function ProductContent() {
               >
                 <ChevronLeft size={18} />
               </button>
-
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
                 <button
                   key={p}
@@ -326,7 +223,6 @@ function ProductContent() {
                   {p}
                 </button>
               ))}
-
               <button
                 onClick={() => goToPage(page + 1)}
                 disabled={page === totalPages}
@@ -382,20 +278,17 @@ function ProductContent() {
                     {selected.dose}
                   </span>
                 </div>
-
                 <h2 className="text-2xl font-bold text-slate-900 mb-3">
                   {selected.name}
                 </h2>
-
                 <p className="text-slate-600 text-sm leading-relaxed mb-6">
-                  {selected.about}
+                  {selected.about[lang]}
                 </p>
-
                 <button
                   onClick={() => setSelected(null)}
                   className="w-full py-3 rounded-xl bg-slate-900 text-white text-sm font-semibold hover:bg-slate-800 transition"
                 >
-                  Close
+                  {t("landingProduct.close")}
                 </button>
               </div>
             </motion.div>

@@ -1,25 +1,26 @@
 "use client";
-
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
-import { Search, Menu, X, ChevronRight, Clock } from "lucide-react";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
+import { Search, Menu, X, ChevronRight, Clock, Globe } from "lucide-react";
 import { products } from "@/data/products";
 import { Cinzel } from "next/font/google";
+import { useLanguage } from "@/context/LanguageContext";
 
 const navLinks = [
-  { name: "Home", href: "/" },
-  { name: "Contact", href: "/contact" },
-  { name: "Verify Code", href: "/verify-code" },
+  { key: "home", href: "/" },
+  { key: "contact", href: "/contact" },
+  { key: "verifyCode", href: "/verify-code" },
+  { key: "calculator", href: "/calculator" },
 ];
 
 const categories = [
-  { name: "Injectables", available: false },
-  { name: "Orals", available: false },
-  { name: "Peptides", available: true },
-  { name: "SARMs", available: false },
+  { name: "Injectables", key: "injectables", available: false },
+  { name: "Orals", key: "orals", available: false },
+  { name: "Peptides", key: "peptides", available: true },
+  { name: "SARMs", key: "sarms", available: false },
 ];
 
 const cinzel = Cinzel({
@@ -28,6 +29,8 @@ const cinzel = Cinzel({
 });
 
 export default function Navbar() {
+  const { lang, toggleLanguage, t } = useLanguage();
+
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [showResults, setShowResults] = useState(false);
@@ -36,10 +39,77 @@ export default function Navbar() {
   const [mobileProductOpen, setMobileProductOpen] = useState(false);
   const [mobilePeptidesOpen, setMobilePeptidesOpen] = useState(false);
   const [comingSoon, setComingSoon] = useState(false);
+  const [isLightBg, setIsLightBg] = useState(false);
+  
+  // State to track scroll direction (hide on scroll down, show on scroll up)
+  const [hidden, setHidden] = useState(false);
+  
   const closeTimer = useRef(null);
-
+  const headerRef = useRef(null);
   const pathname = usePathname();
   const router = useRouter();
+
+  // Handle Scroll Direction for Hide/Show Navbar
+  const { scrollY } = useScroll();
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const previous = scrollY.getPrevious() ?? 0;
+    // Don't hide if the mobile menu is open or if at top of page
+    if (latest > previous && latest > 100 && !isOpen) {
+      setHidden(true);
+    } else {
+      setHidden(false);
+    }
+  });
+
+  // Detects background behind navbar
+  useEffect(() => {
+    const checkBackground = () => {
+      const probeY = 40;
+      const probeX = window.innerWidth / 2;
+
+      const headerEl = headerRef.current;
+      const prevPointerEvents = headerEl ? headerEl.style.pointerEvents : null;
+      if (headerEl) headerEl.style.pointerEvents = "none";
+
+      const el = document.elementFromPoint(probeX, probeY);
+
+      if (headerEl) headerEl.style.pointerEvents = prevPointerEvents || "";
+
+      let node = el;
+      let bg = null;
+
+      while (node && node !== document.body) {
+        const color = window.getComputedStyle(node).backgroundColor;
+        if (color && color !== "rgba(0, 0, 0, 0)" && color !== "transparent") {
+          bg = color;
+          break;
+        }
+        node = node.parentElement;
+      }
+
+      if (bg) {
+        const rgb = bg.match(/\d+/g);
+        if (rgb) {
+          const [r, g, b] = rgb.map(Number);
+          const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+          setIsLightBg(luminance > 0.65);
+        }
+      } else {
+        setIsLightBg(false);
+      }
+    };
+
+    checkBackground();
+    window.addEventListener("scroll", checkBackground, { passive: true });
+    window.addEventListener("resize", checkBackground);
+    const interval = setInterval(checkBackground, 500);
+
+    return () => {
+      window.removeEventListener("scroll", checkBackground);
+      window.removeEventListener("resize", checkBackground);
+      clearInterval(interval);
+    };
+  }, [pathname]);
 
   const handleNavClick = (e, href) => {
     if (href === "/" && pathname === "/") {
@@ -105,18 +175,26 @@ export default function Navbar() {
   return (
     <>
       <motion.header
+        ref={headerRef}
         initial={{ opacity: 0, y: -40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, ease: "easeOut" }}
-        className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-6xl"
+        animate={
+          hidden
+            ? { opacity: 0, y: "-120%" }
+            : { opacity: 1, y: 0 }
+        }
+        transition={{ duration: 0.35, ease: "easeInOut" }}
+        className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-8xl"
       >
-        <div className="flex items-center justify-between gap-6 px-5 py-0 rounded-2xl bg-black/20 backdrop-blur-xl border border-white/30 shadow-2xl">
+        <div
+          className={`flex items-center justify-between gap-6 px-5 py-0 rounded-2xl backdrop-blur-xl border border-white/30 shadow-2xl transition-colors duration-300 ${
+            isLightBg ? "bg-black/50" : "bg-black/20"
+          }`}
+        >
           <Link
             href="/"
             onClick={(e) => handleNavClick(e, "/")}
             className="flex items-center shrink-0"
           >
-            {" "}
             <Image
               src="/brand/healix-logo.png"
               alt="Healix logo"
@@ -124,12 +202,12 @@ export default function Navbar() {
               height={75}
               priority
               className="object-contain"
-            />{" "}
+            />
             <span
               className={`${cinzel.className} ml-2 text-white font-bold text-base tracking-[0.15em] uppercase md:hidden`}
             >
               HEALIX PHARMA
-            </span>{" "}
+            </span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-8">
@@ -138,7 +216,7 @@ export default function Navbar() {
               onClick={(e) => handleNavClick(e, "/")}
               className="text-sm font-medium text-white/90 hover:text-white transition-colors"
             >
-              Home
+              {t("nav.home")}
             </Link>
 
             <div
@@ -147,10 +225,9 @@ export default function Navbar() {
               onMouseLeave={scheduleCloseProductMenu}
             >
               <button className="text-sm font-medium text-white/90 hover:text-white transition-colors flex items-center gap-1">
-                Product
+                {t("nav.product")}
                 <ChevronRight size={12} className="rotate-90" />
               </button>
-
               <AnimatePresence>
                 {productMenuOpen && (
                   <motion.div
@@ -176,7 +253,7 @@ export default function Navbar() {
                               onClick={() => handleCategoryClick(cat)}
                               className="w-full text-left px-4 py-2.5 text-sm text-white/90 hover:text-white hover:bg-white/10 transition-colors flex items-center justify-between"
                             >
-                              <span>{cat.name}</span>
+                              <span>{t(`nav.categories.${cat.key}`)}</span>
                               {!cat.available && (
                                 <Clock size={13} className="text-white/40" />
                               )}
@@ -190,19 +267,19 @@ export default function Navbar() {
                             className="w-full text-left px-4 py-2 text-xs text-white/50 hover:text-white/80 flex items-center gap-1"
                           >
                             <ChevronRight size={12} className="rotate-180" />
-                            Back
+                            {t("nav.back")}
                           </button>
                           <button
                             onClick={() => goToPack("1")}
                             className="w-full text-left px-4 py-2.5 text-sm text-white/90 hover:text-white hover:bg-white/10 transition-colors"
                           >
-                            Pack of 1
+                            {t("nav.packOf1")}
                           </button>
                           <button
                             onClick={() => goToPack("3")}
                             className="w-full text-left px-4 py-2.5 text-sm text-white/90 hover:text-white hover:bg-white/10 transition-colors"
                           >
-                            Pack of 3
+                            {t("nav.packOf3")}
                           </button>
                         </div>
                       )}
@@ -214,55 +291,66 @@ export default function Navbar() {
 
             {navLinks.slice(1).map((link) => (
               <Link
-                key={link.name}
+                key={link.key}
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link.href)}
                 className="text-sm font-medium text-white/90 hover:text-white transition-colors"
               >
-                {link.name}
+                {t(`nav.${link.key}`)}
               </Link>
             ))}
           </nav>
 
-          <div className="hidden sm:block relative">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/30 focus-within:border-white/60 transition-colors">
-              <Search size={15} className="text-white/70" />
-              <input
-                type="text"
-                value={query}
-                onChange={(e) => {
-                  setQuery(e.target.value);
-                  setShowResults(true);
-                }}
-                onFocus={() => setShowResults(true)}
-                onBlur={() => setTimeout(() => setShowResults(false), 150)}
-                placeholder="Search Products..."
-                className="bg-transparent outline-none text-sm text-white placeholder-white/60 w-32 md:w-40"
-              />
+          <div className="hidden sm:flex items-center gap-3">
+            <div className="relative">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/30 focus-within:border-white/60 transition-colors">
+                <Search size={15} className="text-white/70" />
+                <input
+                  type="text"
+                  value={query}
+                  onChange={(e) => {
+                    setQuery(e.target.value);
+                    setShowResults(true);
+                  }}
+                  onFocus={() => setShowResults(true)}
+                  onBlur={() => setTimeout(() => setShowResults(false), 150)}
+                  placeholder={t("nav.searchPlaceholder")}
+                  className="bg-transparent outline-none text-sm text-white placeholder-white/60 w-32 md:w-40"
+                />
+              </div>
+              <AnimatePresence>
+                {showResults && results.length > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute top-full mt-2 right-0 w-56 rounded-xl bg-white shadow-2xl border border-slate-100 overflow-hidden z-50"
+                  >
+                    {results.map((p) => (
+                      <button
+                        key={p.id}
+                        onMouseDown={() => goToProduct(p.id)}
+                        className="w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors flex items-center justify-between"
+                      >
+                        <span className="font-medium">{p.name}</span>
+                        <span className="text-xs text-blue-500">{p.dose}</span>
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
-            <AnimatePresence>
-              {showResults && results.length > 0 && (
-                <motion.div
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.2 }}
-                  className="absolute top-full mt-2 right-0 w-56 rounded-xl bg-white shadow-2xl border border-slate-100 overflow-hidden z-50"
-                >
-                  {results.map((p) => (
-                    <button
-                      key={p.id}
-                      onMouseDown={() => goToProduct(p.id)}
-                      className="w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors flex items-center justify-between"
-                    >
-                      <span className="font-medium">{p.name}</span>
-                      <span className="text-xs text-blue-500">{p.dose}</span>
-                    </button>
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
+            {/* Language toggle - desktop */}
+            <button
+              onClick={toggleLanguage}
+              className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-white/10 border border-white/30 text-white/90 hover:text-white hover:bg-white/20 transition-colors text-sm font-medium shrink-0"
+              aria-label="Toggle language"
+            >
+              <Globe size={15} />
+              {lang === "en" ? "TH" : "EN"}
+            </button>
           </div>
 
           <button
@@ -274,6 +362,7 @@ export default function Navbar() {
           </button>
         </div>
 
+        {/* Mobile Navigation Drawer - Dynamic background matching navbar */}
         <AnimatePresence>
           {isOpen && (
             <motion.div
@@ -281,7 +370,9 @@ export default function Navbar() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -10, scale: 0.98 }}
               transition={{ duration: 0.25, ease: "easeOut" }}
-              className="md:hidden mt-2 rounded-2xl bg-black/20 backdrop-blur-xl border border-white/30 shadow-2xl overflow-hidden"
+              className={`md:hidden mt-2 rounded-2xl backdrop-blur-xl border border-white/30 shadow-2xl overflow-hidden transition-colors duration-300 ${
+                isLightBg ? "bg-black/50" : "bg-black/20"
+              }`}
             >
               <nav className="flex flex-col p-4 gap-1">
                 <Link
@@ -292,20 +383,19 @@ export default function Navbar() {
                   }}
                   className="text-sm font-medium text-white/90 hover:text-white hover:bg-white/10 rounded-lg px-3 py-2.5 transition-colors"
                 >
-                  Home
+                  {t("nav.home")}
                 </Link>
 
                 <button
                   onClick={() => setMobileProductOpen((prev) => !prev)}
                   className="w-full text-left text-sm font-medium text-white/90 hover:text-white hover:bg-white/10 rounded-lg px-3 py-2.5 transition-colors flex items-center justify-between"
                 >
-                  Product
+                  {t("nav.product")}
                   <ChevronRight
                     size={14}
                     className={`transition-transform ${mobileProductOpen ? "rotate-90" : ""}`}
                   />
                 </button>
-
                 <AnimatePresence>
                   {mobileProductOpen && (
                     <motion.div
@@ -330,7 +420,7 @@ export default function Navbar() {
                             }}
                             className="w-full text-left text-sm text-white/80 hover:text-white rounded-lg px-3 py-2 transition-colors flex items-center justify-between"
                           >
-                            {cat.name}
+                            {t(`nav.categories.${cat.key}`)}
                             {!cat.available && (
                               <Clock size={13} className="text-white/40" />
                             )}
@@ -343,19 +433,19 @@ export default function Navbar() {
                             className="w-full text-left text-xs text-white/50 hover:text-white/80 px-3 py-1.5 flex items-center gap-1"
                           >
                             <ChevronRight size={12} className="rotate-180" />
-                            Back
+                            {t("nav.back")}
                           </button>
                           <button
                             onClick={() => goToPack("1")}
                             className="w-full text-left text-sm text-white/80 hover:text-white rounded-lg px-3 py-2 transition-colors"
                           >
-                            Pack of 1
+                            {t("nav.packOf1")}
                           </button>
                           <button
                             onClick={() => goToPack("3")}
                             className="w-full text-left text-sm text-white/80 hover:text-white rounded-lg px-3 py-2 transition-colors"
                           >
-                            Pack of 3
+                            {t("nav.packOf3")}
                           </button>
                         </div>
                       )}
@@ -365,7 +455,7 @@ export default function Navbar() {
 
                 {navLinks.slice(1).map((link) => (
                   <Link
-                    key={link.name}
+                    key={link.key}
                     href={link.href}
                     onClick={(e) => {
                       handleNavClick(e, link.href);
@@ -373,7 +463,7 @@ export default function Navbar() {
                     }}
                     className="text-sm font-medium text-white/90 hover:text-white hover:bg-white/10 rounded-lg px-3 py-2.5 transition-colors"
                   >
-                    {link.name}
+                    {t(`nav.${link.key}`)}
                   </Link>
                 ))}
 
@@ -387,11 +477,10 @@ export default function Navbar() {
                         setQuery(e.target.value);
                         setShowResults(true);
                       }}
-                      placeholder="Search Products..."
+                      placeholder={t("nav.searchPlaceholder")}
                       className="bg-transparent outline-none text-sm text-white placeholder-white/60 w-full"
                     />
                   </div>
-
                   {showResults && results.length > 0 && (
                     <div className="mt-2 rounded-xl bg-white shadow-2xl border border-slate-100 overflow-hidden">
                       {results.map((p) => (
@@ -409,6 +498,18 @@ export default function Navbar() {
                     </div>
                   )}
                 </div>
+
+                {/* Language toggle - mobile */}
+                <button
+                  onClick={toggleLanguage}
+                  className="mt-2 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-white/10 border border-white/30 text-white/90 hover:text-white hover:bg-white/20 transition-colors text-sm font-medium"
+                  aria-label="Toggle language"
+                >
+                  <Globe size={15} />
+                  {lang === "en"
+                    ? "เปลี่ยนเป็นไทย (TH)"
+                    : "Switch to English (EN)"}
+                </button>
               </nav>
             </motion.div>
           )}
@@ -437,17 +538,16 @@ export default function Navbar() {
                 <Clock size={24} className="text-blue-500" />
               </div>
               <h3 className="text-lg font-bold text-slate-900 mb-2">
-                Coming Soon
+                {t("nav.comingSoonTitle")}
               </h3>
               <p className="text-slate-500 text-sm leading-relaxed mb-6">
-                These products are currently in production and will be available
-                shortly. Please check back soon.
+                {t("nav.comingSoonDesc")}
               </p>
               <button
                 onClick={() => setComingSoon(false)}
                 className="w-full py-3 rounded-xl bg-slate-900 text-white text-sm font-semibold hover:bg-slate-800 transition"
               >
-                Got it
+                {t("nav.gotIt")}
               </button>
             </motion.div>
           </motion.div>

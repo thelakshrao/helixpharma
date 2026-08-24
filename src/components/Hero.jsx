@@ -3,21 +3,22 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLanguage } from "@/context/LanguageContext";
 
 const slides = [
   {
     image: "/brand/hero1.png",
-    slogan: "Push Beyond Limits",
+    key: "slide1",
     position: "object-[75%_center] sm:object-center",
   },
   {
     image: "/brand/hero2.png",
-    slogan: "Engineered To Perform",
+    key: "slide2",
     position: "object-[65%_center] sm:object-[60%_center]",
   },
   {
     image: "/brand/hero3.png",
-    slogan: "Purity You Can Trust",
+    key: "slide3",
     position: "object-[65%_center] sm:object-[60%_center]",
   },
 ];
@@ -27,8 +28,7 @@ const SLIDE_DURATION = 5000;
 // Persistent trust points — same content shown regardless of which slide is active
 const trustPoints = [
   {
-    title: "99% Purity",
-    desc: "Third-party tested",
+    key: "purity",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4 sm:w-5 sm:h-5">
         <path
@@ -48,8 +48,7 @@ const trustPoints = [
     ),
   },
   {
-    title: "Research Grade",
-    desc: "Lab use only",
+    key: "research",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4 sm:w-5 sm:h-5">
         <path
@@ -64,8 +63,7 @@ const trustPoints = [
     ),
   },
   {
-    title: "COA Available",
-    desc: "Batch tested",
+    key: "coa",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4 sm:w-5 sm:h-5">
         <path
@@ -86,8 +84,7 @@ const trustPoints = [
     ),
   },
   {
-    title: "Quality Assured",
-    desc: "Every step checked",
+    key: "quality",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4 sm:w-5 sm:h-5">
         <path
@@ -104,6 +101,7 @@ const trustPoints = [
 ];
 
 export default function Hero() {
+  const { t } = useLanguage();
   const [index, setIndex] = useState(0);
   const intervalRef = useRef(null);
 
@@ -157,14 +155,14 @@ export default function Hero() {
 
         <AnimatePresence mode="wait">
           <motion.p
-            key={slides[index].slogan}
+            key={slides[index].key}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
             className="mt-2 sm:mt-5 text-sm sm:text-xl md:text-2xl font-light text-white/90 tracking-[0.2em] sm:tracking-[0.3em] uppercase drop-shadow-md"
           >
-            {slides[index].slogan}
+            {t(`hero.slides.${slides[index].key}`)}
           </motion.p>
         </AnimatePresence>
 
@@ -174,8 +172,7 @@ export default function Hero() {
           transition={{ duration: 0.6, ease: "easeOut", delay: 0.3 }}
           className="mt-3 sm:mt-5 text-white/80 text-xs sm:text-base leading-relaxed px-6 sm:px-0 max-w-xs sm:max-w-sm mx-auto sm:mx-0"
         >
-          Lab-tested, pharmaceutical-grade compounds trusted by professionals
-          worldwide.
+          {t("hero.description")}
         </motion.p>
 
         {/* Persistent 4-point trust block — same on every slide, glass style to match existing UI */}
@@ -187,15 +184,15 @@ export default function Hero() {
         >
           {trustPoints.map((point) => (
             <div
-              key={point.title}
+              key={point.key}
               className="flex flex-col items-start gap-0.5 sm:gap-1 rounded-lg bg-white/10 backdrop-blur-xl border border-white/30 shadow-lg px-2 py-1.5 sm:px-2.5 sm:py-2 text-left"
             >
               <span className="text-white">{point.icon}</span>
               <span className="text-[10px] sm:text-[11px] font-semibold text-white leading-tight whitespace-nowrap">
-                {point.title}
+                {t(`hero.trust.${point.key}.title`)}
               </span>
               <span className="hidden sm:block text-[10px] text-white/70 leading-snug">
-                {point.desc}
+                {t(`hero.trust.${point.key}.desc`)}
               </span>
             </div>
           ))}
@@ -209,14 +206,13 @@ export default function Hero() {
         className="md:hidden absolute bottom-4 left-4 right-4 text-left px-4 py-3 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/30 shadow-xl"
       >
         <p className="text-[10px] uppercase tracking-widest text-white/90 mb-1">
-          — HEALIX PHARMA
+          {t("hero.brandLabel")}
         </p>
         <h1 className="text-xs font-medium leading-snug text-white">
-          Engineered for peak performance. Trusted by athletes who push their
-          limits every single day.
+          {t("hero.tagline")}
         </h1>
         <button className="mt-3 px-4 py-1.5 bg-white text-gray-900 text-xs font-medium rounded-full hover:bg-gray-100 transition cursor-pointer">
-          Verify Authenticity
+          {t("hero.verifyButton")}
         </button>
       </motion.div>
 
@@ -232,7 +228,7 @@ export default function Hero() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="text-xs uppercase tracking-widest text-white/90 mb-2"
         >
-          — HEALIX PHARMA
+          {t("hero.brandLabel")}
         </motion.p>
 
         <motion.h1
@@ -241,8 +237,7 @@ export default function Hero() {
           transition={{ duration: 0.6, delay: 0.55 }}
           className="text-2xl md:text-3xl font-bold leading-snug text-white"
         >
-          Engineered for peak performance. Trusted by athletes who push their
-          limits every single day.
+          {t("hero.tagline")}
         </motion.h1>
 
         <motion.button
@@ -257,7 +252,7 @@ export default function Hero() {
           }}
           className="mt-4 px-5 py-2 bg-white text-gray-900 text-sm font-medium rounded-full hover:bg-gray-100 transition cursor-pointer"
         >
-          Verify Authenticity
+          {t("hero.verifyButton")}
         </motion.button>
       </motion.div>
     </section>

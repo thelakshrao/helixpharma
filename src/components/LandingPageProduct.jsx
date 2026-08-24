@@ -6,8 +6,10 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, X, ShieldCheck } from "lucide-react";
 import { products } from "@/data/products";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function LandingPageProduct() {
+  const { t, lang } = useLanguage();
   const scrollRef = useRef(null);
   const [selected, setSelected] = useState(null);
   const searchParams = useSearchParams();
@@ -51,13 +53,13 @@ export default function LandingPageProduct() {
           <span className="w-8 h-0.5 bg-blue-400" />
 
           <p className="text-xs sm:text-sm uppercase tracking-widest text-blue-400 font-semibold">
-            Our Research Peptides
+            {t("landingProduct.eyebrow")}
           </p>
         </div>
 
         <div className="flex items-end justify-between mb-8">
           <h2 className="text-xl sm:text-3xl md:text-4xl font-bold text-slate-900 leading-snug max-w-xl">
-            Explore the Healix Pharma lineup.
+            {t("landingProduct.heading")}
           </h2>
 
           <div className="hidden sm:flex gap-2">
@@ -118,7 +120,7 @@ export default function LandingPageProduct() {
                 </div>
 
                 <p className="text-slate-500 text-sm leading-relaxed">
-                  {p.short}
+                  {p.short[lang]}
                 </p>
               </div>
             </motion.button>
@@ -210,14 +212,14 @@ export default function LandingPageProduct() {
                 </h2>
 
                 <p className="text-slate-600 text-sm leading-relaxed mb-6">
-                  {selected.about}
+                  {selected.about[lang]}
                 </p>
 
                 <button
                   onClick={() => setSelected(null)}
                   className="w-full py-3 rounded-xl bg-slate-900 text-white text-sm font-semibold hover:bg-slate-800 transition"
                 >
-                  Close
+                  {t("landingProduct.close")}
                 </button>
               </div>
             </motion.div>

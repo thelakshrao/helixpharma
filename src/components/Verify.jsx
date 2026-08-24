@@ -15,68 +15,23 @@ import {
   Leaf,
   Clock,
 } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
-const infoCards = [
-  {
-    icon: ScanLine,
-    title: "Locate the panel",
-    desc: "Flip your box and find the silver scratch panel printed on the back label.",
-  },
-  {
-    icon: KeyRound,
-    title: "Reveal the code",
-    desc: "Gently scratch it off with a coin to reveal your unique verification code.",
-  },
-  {
-    icon: AlertTriangle,
-    title: "One-time use",
-    desc: "Each code works only once. If it's already scratched at purchase, don't use the product.",
-  },
+const infoCardsMeta = [
+  { icon: ScanLine, key: "locate" },
+  { icon: KeyRound, key: "reveal" },
+  { icon: AlertTriangle, key: "oneTime" },
 ];
 
-const resultConfig = {
-  valid: {
-    icon: CheckCircle2,
-    accent: "text-blue-600",
-    badgeBg: "bg-blue-50",
-    badgeBorder: "border-blue-100",
-    title: "Genuine Product",
-    subtitle: "Your product has been successfully verified.",
-    note: "Thank you for choosing Healix Pharmaceutical. This product is authentic.",
-  },
-
-  already_used: {
-    icon: AlertTriangle,
-    accent: "text-amber-600",
-    badgeBg: "bg-amber-50",
-    badgeBorder: "border-amber-100",
-    title: "Already Verified",
-    subtitle: "This code has already been used before.",
-    note: "If you didn't scratch this code yourself, please don't use this product and contact us.",
-  },
-
-  invalid: {
-    icon: XCircle,
-    accent: "text-red-600",
-    badgeBg: "bg-red-50",
-    badgeBorder: "border-red-100",
-    title: "Invalid Code",
-    subtitle: "We couldn't verify this code.",
-    note: "Please double-check the code, or contact our support team before using this product.",
-  },
-
-  error: {
-    icon: XCircle,
-    accent: "text-red-600",
-    badgeBg: "bg-red-50",
-    badgeBorder: "border-red-100",
-    title: "Something Went Wrong",
-    subtitle: "Please try again in a moment.",
-    note: "If this keeps happening, reach out to our support team for help.",
-  },
+const resultMeta = {
+  valid: { icon: CheckCircle2, accent: "text-blue-600", badgeBg: "bg-blue-50", badgeBorder: "border-blue-100" },
+  already_used: { icon: AlertTriangle, accent: "text-amber-600", badgeBg: "bg-amber-50", badgeBorder: "border-amber-100" },
+  invalid: { icon: XCircle, accent: "text-red-600", badgeBg: "bg-red-50", badgeBorder: "border-red-100" },
+  error: { icon: XCircle, accent: "text-red-600", badgeBg: "bg-red-50", badgeBorder: "border-red-100" },
 };
 
 export default function Verify() {
+  const { t, lang } = useLanguage();
   const [code, setCode] = useState("");
   const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -132,12 +87,12 @@ export default function Verify() {
     }
   };
 
-  const result = status ? resultConfig[status] : null;
-  const ResultIcon = result?.icon;
+  const meta = status ? resultMeta[status] : null;
+  const ResultIcon = meta?.icon;
 
   const isValid = status === "valid";
 
-  const verifiedOn = new Date().toLocaleString("en-US", {
+  const verifiedOn = new Date().toLocaleString(lang === "th" ? "th-TH" : "en-US", {
     day: "2-digit",
     month: "short",
     year: "numeric",
@@ -186,7 +141,7 @@ export default function Verify() {
             }}
             className="text-2xl sm:text-4xl md:text-5xl font-bold text-white leading-tight mb-3 sm:mb-4"
           >
-            Verify Your Product
+            {t("verify.hero.title")}
           </motion.h1>
 
           <motion.p
@@ -200,8 +155,7 @@ export default function Verify() {
             }}
             className="text-xs sm:text-base text-white/80 max-w-md mb-6 sm:mb-8 leading-relaxed"
           >
-            Every genuine Healix Pharma product carries a unique scratch code.
-            Verify it here to confirm your product is 100% authentic.
+            {t("verify.hero.description")}
           </motion.p>
 
           <motion.form
@@ -223,7 +177,7 @@ export default function Verify() {
                 setCode(e.target.value);
                 setStatus(null);
               }}
-              placeholder="Enter your code"
+              placeholder={t("verify.hero.inputPlaceholder")}
               className="flex-1 bg-transparent outline-none text-white placeholder-white/50 text-xs sm:text-base px-3 py-2.5 sm:px-4 sm:py-3"
             />
 
@@ -234,18 +188,18 @@ export default function Verify() {
               disabled={loading}
               className="px-5 py-2.5 sm:px-6 sm:py-3 bg-white text-gray-900 text-xs sm:text-sm font-semibold rounded-xl hover:bg-gray-100 transition disabled:opacity-60 cursor-pointer"
             >
-              {loading ? "Checking..." : "Verify Now"}
+              {loading ? t("verify.hero.checking") : t("verify.hero.verifyButton")}
             </motion.button>
           </motion.form>
         </div>
 
         <div className="flex flex-col gap-3 sm:gap-4">
-          {infoCards.map((card, i) => {
+          {infoCardsMeta.map((card, i) => {
             const Icon = card.icon;
 
             return (
               <motion.div
-                key={card.title}
+                key={card.key}
                 initial={{
                   opacity: 0,
                   x: 40,
@@ -270,11 +224,11 @@ export default function Verify() {
 
                 <div>
                   <h3 className="text-white font-semibold text-xs sm:text-base mb-0.5 sm:mb-1">
-                    {card.title}
+                    {t(`verify.infoCards.${card.key}.title`)}
                   </h3>
 
                   <p className="text-white/70 text-[11px] sm:text-sm leading-relaxed">
-                    {card.desc}
+                    {t(`verify.infoCards.${card.key}.desc`)}
                   </p>
                 </div>
               </motion.div>
@@ -284,7 +238,7 @@ export default function Verify() {
       </div>
 
       <AnimatePresence>
-        {showModal && result && (
+        {showModal && meta && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -351,15 +305,15 @@ export default function Verify() {
                     </h3>
 
                     <p className="text-white/80 text-[10px] sm:text-xs uppercase tracking-widest mb-4 sm:mb-6">
-                      Pharmaceutical
+                      {t("verify.modal.pharmaceutical")}
                     </p>
 
                     <p className="text-white font-semibold text-xs sm:text-sm mb-0.5">
-                      100% Pure.
+                      {t("verify.modal.pureLine1")}
                     </p>
 
                     <p className="text-white/80 text-xs sm:text-sm mb-6 sm:mb-8">
-                      Always Trusted.
+                      {t("verify.modal.pureLine2")}
                     </p>
 
                     <div className="w-full border-t border-white/20 mb-4 sm:mb-6" />
@@ -372,11 +326,11 @@ export default function Verify() {
 
                         <div>
                           <p className="text-white text-xs font-semibold">
-                            100% Authentic
+                            {t("verify.modal.authentic.title")}
                           </p>
 
                           <p className="text-white/60 text-[10px] sm:text-[11px]">
-                            Genuine product guaranteed
+                            {t("verify.modal.authentic.desc")}
                           </p>
                         </div>
                       </div>
@@ -388,11 +342,11 @@ export default function Verify() {
 
                         <div>
                           <p className="text-white text-xs font-semibold">
-                            Lab Tested
+                            {t("verify.modal.labTested.title")}
                           </p>
 
                           <p className="text-white/60 text-[10px] sm:text-[11px]">
-                            Advanced quality assurance
+                            {t("verify.modal.labTested.desc")}
                           </p>
                         </div>
                       </div>
@@ -404,18 +358,18 @@ export default function Verify() {
 
                         <div>
                           <p className="text-white text-xs font-semibold">
-                            Research Grade
+                            {t("verify.modal.researchGrade.title")}
                           </p>
 
                           <p className="text-white/60 text-[10px] sm:text-[11px]">
-                            For laboratory use only
+                            {t("verify.modal.researchGrade.desc")}
                           </p>
                         </div>
                       </div>
                     </div>
 
                     <p className="text-white/70 italic text-[11px] sm:text-xs mt-6 sm:mt-8">
-                      Your health, our promise!
+                      {t("verify.modal.promise")}
                     </p>
                   </div>
                 </div>
@@ -424,18 +378,18 @@ export default function Verify() {
                   <div className="flex items-start justify-between mb-4 sm:mb-6 pr-6 sm:pr-8">
                     <div className="flex items-center gap-2.5 sm:gap-3">
                       <div
-                        className={`w-9 h-9 sm:w-11 sm:h-11 rounded-full flex items-center justify-center border ${result.badgeBg} ${result.badgeBorder}`}
+                        className={`w-9 h-9 sm:w-11 sm:h-11 rounded-full flex items-center justify-center border ${meta.badgeBg} ${meta.badgeBorder}`}
                       >
-                        <ResultIcon size={18} className={`${result.accent} sm:w-5.5 sm:h-5.5`} />
+                        <ResultIcon size={18} className={`${meta.accent} sm:w-5.5 sm:h-5.5`} />
                       </div>
 
                       <div>
-                        <h2 className={`text-base sm:text-lg font-bold ${result.accent}`}>
-                          {result.title}
+                        <h2 className={`text-base sm:text-lg font-bold ${meta.accent}`}>
+                          {t(`verify.result.${status}.title`)}
                         </h2>
 
                         <p className="text-slate-500 text-xs sm:text-sm">
-                          {result.subtitle}
+                          {t(`verify.result.${status}.subtitle`)}
                         </p>
                       </div>
                     </div>
@@ -445,7 +399,7 @@ export default function Verify() {
                     <div className="flex items-center justify-between gap-3 px-3.5 py-2.5 sm:px-4 sm:py-3 bg-slate-50/50">
                       <span className="flex items-center gap-2 text-slate-500 text-xs sm:text-sm shrink-0">
                         <ShieldCheck size={14} />
-                        Verification Code
+                        {t("verify.details.verificationCode")}
                       </span>
 
                       <span className="text-slate-900 font-semibold text-xs sm:text-sm tracking-wide text-right break-all">
@@ -456,7 +410,7 @@ export default function Verify() {
                     <div className="flex items-center justify-between gap-3 px-3.5 py-2.5 sm:px-4 sm:py-3">
                       <span className="flex items-center gap-2 text-slate-500 text-xs sm:text-sm shrink-0">
                         <ScanLine size={14} />
-                        Scan Status
+                        {t("verify.details.scanStatus")}
                       </span>
 
                       <span
@@ -469,10 +423,10 @@ export default function Verify() {
                         }`}
                       >
                         {isValid
-                          ? "First Scan"
+                          ? t("verify.details.firstScan")
                           : status === "already_used"
-                            ? "Already Scanned"
-                            : "Not Found"}
+                            ? t("verify.details.alreadyScanned")
+                            : t("verify.details.notFound")}
 
                         <ResultIcon size={14} />
                       </span>
@@ -481,7 +435,7 @@ export default function Verify() {
                     <div className="flex items-center justify-between gap-3 px-3.5 py-2.5 sm:px-4 sm:py-3 bg-slate-50/50">
                       <span className="flex items-center gap-2 text-slate-500 text-xs sm:text-sm shrink-0">
                         <Clock size={14} />
-                        Verify On
+                        {t("verify.details.verifyOn")}
                       </span>
 
                       <span className="text-slate-900 font-semibold text-xs sm:text-sm text-right">
@@ -491,17 +445,17 @@ export default function Verify() {
                   </div>
 
                   <div
-                    className={`flex items-start gap-2.5 sm:gap-3 rounded-2xl border px-3.5 py-3 sm:px-4 sm:py-4 mb-4 sm:mb-6 ${result.badgeBg} ${result.badgeBorder}`}
+                    className={`flex items-start gap-2.5 sm:gap-3 rounded-2xl border px-3.5 py-3 sm:px-4 sm:py-4 mb-4 sm:mb-6 ${meta.badgeBg} ${meta.badgeBorder}`}
                   >
                     <ShieldCheck
                       size={16}
-                      className={`mt-0.5 shrink-0 ${result.accent} sm:w-4.5 sm:h-4.5`}
+                      className={`mt-0.5 shrink-0 ${meta.accent} sm:w-4.5 sm:h-4.5`}
                     />
 
                     <p
-                      className={`text-xs sm:text-sm font-medium leading-relaxed ${result.accent}`}
+                      className={`text-xs sm:text-sm font-medium leading-relaxed ${meta.accent}`}
                     >
-                      {result.note}
+                      {t(`verify.result.${status}.note`)}
                     </p>
                   </div>
 
@@ -509,11 +463,11 @@ export default function Verify() {
                     onClick={closeModal}
                     className="w-full py-2.5 sm:py-3 rounded-xl bg-slate-900 text-white text-xs sm:text-sm font-semibold hover:bg-slate-800 transition"
                   >
-                    Close
+                    {t("verify.close")}
                   </button>
 
                   <p className="text-center text-slate-500 text-[10px] sm:text-[11px] mt-3 sm:mt-4">
-                    © 2026 Healix Pharmaceutical. All Rights Reserved.
+                    {t("verify.copyright")}
                   </p>
                 </div>
               </motion.div>
