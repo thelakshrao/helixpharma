@@ -89,4 +89,14 @@ export const products = [
     about:
       "PT-141 (Bremelanotide) is a peptide studied for its interaction with melanocortin receptors in the central nervous system, with research focused on its influence on neural signaling pathways.",
   },
+  {
+    id: "klowblend",
+    name: "KLOW BLEND",
+    dose: "80 MG",
+    image: "/brand/herop10.png",
+    short:
+      "A specialized multi-peptide blend containing BPC157, TB500, GHK-CU, and KPV for advanced recovery research.",
+    about:
+      "KLOW Blend (80 MG total per vial) combines BPC-157 (10mg), TB-500 (10mg), GHK-Cu (50mg), and KPV (10mg) into a synergistic formulation designed for comprehensive cellular repair, anti-inflammatory, and tissue regeneration research.",
+  },
 ];

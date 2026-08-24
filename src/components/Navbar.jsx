@@ -7,6 +7,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Menu, X, ChevronRight, Clock } from "lucide-react";
 import { products } from "@/data/products";
+import { Cinzel } from "next/font/google";
 
 const navLinks = [
   { name: "Home", href: "/" },
@@ -20,6 +21,11 @@ const categories = [
   { name: "Peptides", available: true },
   { name: "SARMs", available: false },
 ];
+
+const cinzel = Cinzel({
+  subsets: ["latin"],
+  weight: ["600", "700"],
+});
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -104,7 +110,7 @@ export default function Navbar() {
         transition={{ duration: 0.7, ease: "easeOut" }}
         className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-6xl"
       >
-        <div className="flex items-center justify-between gap-6 px-5 py-2 rounded-2xl bg-black/20 backdrop-blur-xl border border-white/30 shadow-2xl">
+        <div className="flex items-center justify-between gap-6 px-5 py-0 rounded-2xl bg-black/20 backdrop-blur-xl border border-white/30 shadow-2xl">
           <Link
             href="/"
             onClick={(e) => handleNavClick(e, "/")}
@@ -114,14 +120,15 @@ export default function Navbar() {
             <Image
               src="/brand/healix-logo.png"
               alt="Healix logo"
-              width={55}
-              height={55}
+              width={75}
+              height={75}
               priority
               className="object-contain"
             />{" "}
-            <span className="ml-2 text-white font-semibold text-lg md:hidden">
-              {" "}
-              HEALIX Pharma{" "}
+            <span
+              className={`${cinzel.className} ml-2 text-white font-bold text-base tracking-[0.15em] uppercase md:hidden`}
+            >
+              HEALIX PHARMA
             </span>{" "}
           </Link>
 

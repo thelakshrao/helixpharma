@@ -13,13 +13,12 @@ import {
 } from "lucide-react";
 import { products as allProductsData } from "@/data/products";
 
-const products = [
+const comboProducts = [
   {
     id: "ghk-cu",
     name: "GHK-CU",
     dose: "100 MG",
-    combo: "/brand/combo1.jpeg",
-    single: "/brand/product1.jpeg",
+    combo: "/brand/combo1.png",
     short:
       "A copper peptide widely studied for skin repair, collagen support, and tissue remodeling research.",
     about:
@@ -29,8 +28,7 @@ const products = [
     id: "kisspeptine",
     name: "KISSPEPTINE",
     dose: "10 MG",
-    combo: "/brand/combo2.jpeg",
-    single: "/brand/product2.jpeg",
+    combo: "/brand/combo2.png",
     short:
       "A key regulatory peptide studied for its role in reproductive hormone signaling pathways.",
     about:
@@ -40,8 +38,7 @@ const products = [
     id: "tesamorelin",
     name: "TESAMORELIN",
     dose: "10 MG",
-    combo: "/brand/combo3.jpeg",
-    single: "/brand/product3.jpeg",
+    combo: "/brand/combo3.png",
     short:
       "A growth hormone-releasing peptide studied for body composition and metabolic research.",
     about:
@@ -51,8 +48,7 @@ const products = [
     id: "dsip",
     name: "DSIP",
     dose: "10 MG",
-    combo: "/brand/combo4.jpeg",
-    single: "/brand/product4.jpeg",
+    combo: "/brand/combo4.png",
     short:
       "Delta sleep-inducing peptide, researched for its role in sleep regulation and stress response studies.",
     about:
@@ -62,8 +58,7 @@ const products = [
     id: "tb-500",
     name: "TB-500",
     dose: "5 MG",
-    combo: "/brand/combo5.jpeg",
-    single: "/brand/product5.jpeg",
+    combo: "/brand/combo5.png",
     short:
       "A synthetic fragment of Thymosin Beta-4, studied for tissue repair and recovery research.",
     about:
@@ -73,8 +68,7 @@ const products = [
     id: "bpc-157",
     name: "BPC-157",
     dose: "10 MG",
-    combo: "/brand/combo6.jpeg",
-    single: "/brand/product6.jpeg",
+    combo: "/brand/combo6.png",
     short:
       "A stable gastric pentadecapeptide studied for tissue repair, gut health, and recovery research.",
     about:
@@ -84,8 +78,7 @@ const products = [
     id: "mots-c",
     name: "MOTS-C",
     dose: "10 MG",
-    combo: "/brand/combo7.jpeg",
-    single: "/brand/product7.jpeg",
+    combo: "/brand/combo7.png",
     short:
       "A mitochondrial-derived peptide researched for metabolic regulation and cellular energy studies.",
     about:
@@ -95,8 +88,7 @@ const products = [
     id: "retatrutide",
     name: "RETATRUTIDE",
     dose: "10 MG",
-    combo: "/brand/combo8.jpeg",
-    single: "/brand/product8.jpeg",
+    combo: "/brand/combo8.png",
     short:
       "A triple hormone receptor agonist studied for metabolic and weight regulation research.",
     about:
@@ -106,36 +98,39 @@ const products = [
     id: "pt-141",
     name: "PT-141",
     dose: "10 MG",
-    combo: "/brand/combo9.jpeg",
-    single: "/brand/product9.jpeg",
+    combo: "/brand/combo9.png",
     short:
       "A melanocortin-based peptide studied for its role in central nervous system signaling research.",
     about:
       "PT-141 (Bremelanotide) is a peptide studied for its interaction with melanocortin receptors in the central nervous system, with research focused on its influence on neural signaling pathways.",
   },
+  {
+    id: "klow-blend",
+    name: "KLOW BLEND",
+    dose: "80 MG",
+    combo: "/brand/combo10.png",
+    short:
+      "A specialized multi-peptide blend containing BPC157, TB500, GHK-CU, and KPV for advanced recovery research.",
+    about:
+      "KLOW Blend (80 MG total per vial) combines BPC-157 (10mg), TB-500 (10mg), GHK-Cu (50mg), and KPV (10mg) into a synergistic formulation designed for comprehensive cellular repair, anti-inflammatory, and tissue regeneration research.",
+  },
 ];
 
-function shuffle(array) {
-  const arr = [...array];
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
-
-function buildItems() {
-  return products.flatMap((p) => [
-    { ...p, variant: "combo", image: p.combo, key: `${p.id}-combo` },
-    { ...p, variant: "single", image: p.single, key: `${p.id}-single` },
-  ]);
-}
-
-function buildAllItems() {
+function buildPack1Items() {
   return allProductsData.map((p) => ({
     ...p,
-    variant: "all",
-    key: `${p.id}-all`,
+    variant: "single",
+    image: p.image || p.single || p.combo,
+    key: `${p.id}-single`,
+  }));
+}
+
+function buildPack3Items() {
+  return comboProducts.map((p) => ({
+    ...p,
+    variant: "combo",
+    image: p.combo,
+    key: `${p.id}-combo`,
   }));
 }
 
@@ -146,38 +141,23 @@ function ProductContent() {
   const initialPack = searchParams.get("pack");
 
   const [query, setQuery] = useState("");
-  const [packFilter, setPackFilter] = useState(initialPack || "all");
+  const [packFilter, setPackFilter] = useState(initialPack || "1");
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState(null);
-  const [allItems, setAllItems] = useState(buildItems);
-  const [allViewItems, setAllViewItems] = useState(buildAllItems);
 
-  useEffect(() => {
-    setAllItems(shuffle(buildItems()));
-    setAllViewItems(shuffle(buildAllItems()));
-  }, []);
+  const pack1Items = useMemo(() => buildPack1Items(), []);
+  const pack3Items = useMemo(() => buildPack3Items(), []);
 
   useEffect(() => {
     if (initialPack) setPackFilter(initialPack);
   }, [initialPack]);
 
   const filtered = useMemo(() => {
-    if (packFilter === "all") {
-      return allViewItems.filter((item) =>
-        item.name.toLowerCase().includes(query.toLowerCase().trim()),
-      );
-    }
-    return allItems.filter((item) => {
-      const matchesQuery = item.name
-        .toLowerCase()
-        .includes(query.toLowerCase().trim());
-      const matchesPack =
-        packFilter === "1"
-          ? item.variant === "single"
-          : item.variant === "combo";
-      return matchesQuery && matchesPack;
-    });
-  }, [query, packFilter, allItems, allViewItems]);
+    const currentList = packFilter === "3" ? pack3Items : pack1Items;
+    return currentList.filter((item) =>
+      item.name.toLowerCase().includes(query.toLowerCase().trim())
+    );
+  }, [query, packFilter, pack1Items, pack3Items]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const pageItems = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
@@ -188,7 +168,6 @@ function ProductContent() {
   };
 
   const packOptions = [
-    { value: "all", label: "All" },
     { value: "1", label: "Pack of 1" },
     { value: "3", label: "Pack of 3" },
   ];
@@ -304,11 +283,6 @@ function ProductContent() {
                         fill
                         className="object-cover object-center scale-100 group-hover:scale-105 transition-transform duration-300"
                       />
-                      {item.variant === "combo" && (
-                        <span className="absolute top-3 left-3 text-[10px] font-semibold uppercase tracking-wide bg-white text-black px-2.5 py-1 rounded-full">
-                          Pack of 3
-                        </span>
-                      )}
                     </div>
                     <div className="p-5">
                       <div className="flex items-center justify-between mb-2">
@@ -390,7 +364,7 @@ function ProductContent() {
                 <X size={16} />
               </button>
 
-              <div className="relative h-52 sm:h-full bg-slate-50 overflow-hidden">
+              <div className="relative h-70 sm:h-80 bg-slate-50 overflow-hidden">
                 <Image
                   src={selected.image}
                   alt={selected.name}
@@ -407,11 +381,6 @@ function ProductContent() {
                   <span className="text-xs font-semibold text-blue-500 bg-blue-50 px-2.5 py-1 rounded-full">
                     {selected.dose}
                   </span>
-                  {selected.variant === "combo" && (
-                    <span className="text-xs font-semibold text-white bg-blue-500 px-2.5 py-1 rounded-full">
-                      Combo
-                    </span>
-                  )}
                 </div>
 
                 <h2 className="text-2xl font-bold text-slate-900 mb-3">
@@ -421,12 +390,6 @@ function ProductContent() {
                 <p className="text-slate-600 text-sm leading-relaxed mb-6">
                   {selected.about}
                 </p>
-
-                <div className="rounded-xl bg-slate-50 border border-slate-100 px-4 py-3 mb-6">
-                  <p className="text-slate-500 text-xs">
-                    For research use only. Not for human consumption.
-                  </p>
-                </div>
 
                 <button
                   onClick={() => setSelected(null)}
