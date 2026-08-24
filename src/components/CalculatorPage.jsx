@@ -35,7 +35,7 @@ function MiniSyringeIcon() {
         strokeWidth="1.5"
         strokeLinecap="round"
       />
-      <rect x="8" y="2" width="3" height="10" fill="#F97316" rx="0.5" />
+      <rect x="8" y="2" width="3" height="10" fill="#EF4444" rx="0.5" />
       <rect
         x="11"
         y="3"
@@ -47,14 +47,14 @@ function MiniSyringeIcon() {
         fill="#FFFFFF"
       />
       <rect x="11" y="3" width="10" height="8" fill="#BFDBFE" opacity="0.8" />
-      <rect x="33" y="2" width="3" height="10" fill="#F97316" rx="0.5" />
-      <line x1="36" y1="7" x2="42" y2="7" stroke="#F97316" strokeWidth="1.5" />
+      <rect x="33" y="2" width="3" height="10" fill="#EF4444" rx="0.5" />
+      <line x1="36" y1="7" x2="42" y2="7" stroke="#EF4444" strokeWidth="1.5" />
       <line
         x1="42"
         y1="3"
         x2="42"
         y2="11"
-        stroke="#F97316"
+        stroke="#EF4444"
         strokeWidth="2"
         strokeLinecap="round"
       />
@@ -70,7 +70,7 @@ function AnimatedSyringe({ units = 0, totalUnits = 100 }) {
       <div className="relative w-full max-w-[320px] h-20 flex items-center justify-center">
         <div className="flex items-center z-10 -mr-px">
           <div className="w-5 h-[1.5px] bg-slate-400" />
-          <div className="w-2.5 h-10 bg-orange-500 rounded-l-xs z-10" />
+          <div className="w-2.5 h-10 bg-red-500 rounded-l-xs z-10" />
         </div>
 
         <div className="relative w-60 h-10 border-2 border-slate-800 bg-white rounded-xs z-20">
@@ -108,9 +108,9 @@ function AnimatedSyringe({ units = 0, totalUnits = 100 }) {
         </div>
 
         <div className="flex items-center z-10 -ml-px">
-          <div className="w-2.5 h-10 bg-orange-500 rounded-r-xs z-10" />
-          <div className="w-3.5 h-0.5 bg-orange-500" />
-          <div className="w-[2.5px] h-7 bg-orange-500 rounded-xs" />
+          <div className="w-2.5 h-10 bg-red-500 rounded-r-xs z-10" />
+          <div className="w-3.5 h-0.5 bg-red-500" />
+          <div className="w-[2.5px] h-7 bg-red-500 rounded-xs" />
         </div>
       </div>
 
@@ -327,7 +327,6 @@ export default function PeptideCalculator() {
             </div>
           </div>
 
-          {/* Calculator Grid Section */}
           <div className="max-w-5xl mx-auto relative">
             <div className="hidden lg:block absolute -left-16 top-1/2 -translate-y-1/2 -z-10 pointer-events-none select-none">
               <Image
@@ -398,7 +397,6 @@ export default function PeptideCalculator() {
                   />
                 </div>
 
-                {/* Step 3 */}
                 <div>
                   <p className="text-xs font-bold text-slate-900 mb-1.5">
                     {t("calculator.form.waterQuestion")}
@@ -514,7 +512,7 @@ export default function PeptideCalculator() {
                     </div>
 
                     {result.exceeds && (
-                      <p className="text-[10px] text-amber-600 bg-amber-50 border border-amber-100 rounded-lg px-2.5 py-1.5 mt-2 leading-relaxed">
+                      <p className="text-[10px] text-red-600 bg-amber-50 border border-amber-100 rounded-lg px-2.5 py-1.5 mt-2 leading-relaxed">
                         {t("calculator.results.exceedsSyringe")}
                       </p>
                     )}

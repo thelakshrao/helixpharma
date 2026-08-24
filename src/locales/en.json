@@ -167,5 +167,48 @@
     },
     "searchPlaceholder": "Search products...",
     "noResults": "No products found matching your search."
+  },
+  "calculator": {
+    "eyebrow": "Research Tool",
+    "title": "Peptide Reconstitution Calculator",
+    "badge": "Optimize Your Journey",
+    "intro": {
+      "title1": "Why Accurate Peptide Dosing Matters",
+      "body1": "Accurate dosing matters because even small calculation errors can lead to large differences in the final amount measured. The Healix Pharma Dosage Calculator helps support safer, more reliable preparation by giving you a quick reference for your dosing needs — useful for anyone who wants a consistent process and fewer manual mistakes.",
+      "title2": "Simple, User-Friendly Support for Daily Use",
+      "body2": "The Healix Pharma Dosage Calculator is built for practical use and clear understanding. It focuses on simplicity so you can get answers without complex steps or confusing formulas."
+    },
+    "form": {
+      "syringeQuestion": "1. What type of syringe are you using?",
+      "syringeU100": "U-100 Syringe (1 mL)",
+      "syringeU40": "U-40 Syringe (1 mL)",
+      "vialQuestion": "2. Select peptide vial quantity",
+      "waterQuestion": "3. How much bacteriostatic water are you adding?",
+      "doseQuestion": "4. Desired dose per injection",
+      "other": "Other",
+      "otherPlaceholder": "Enter amount",
+      "calculateButton": "Calculate Draw",
+      "resetButton": "Reset"
+    },
+    "results": {
+      "awaitingTitle": "Awaiting Configuration",
+      "awaitingDesc": "Adjust your vial and dose values on the left, then click Calculate Draw to see the exact conversion.",
+      "concentration": "Concentration",
+      "drawVolume": "Draw volume",
+      "drawUnits": "Syringe reading",
+      "dosesPerVial": "Doses per vial",
+      "exceedsSyringe": "This draw volume exceeds your selected syringe's capacity. Consider adding more BAC water to lower the concentration."
+    },
+    "resultCard": {
+      "toHaveDose": "To have a dose of",
+      "pullSyringeTo": "pull the syringe to",
+      "units": "Units",
+      "syringeScale": "U-100 Insulin Syringe Scale",
+      "drawInstruction": "Draw volume up to line marker of {units} Units inside your U-100 syringe.",
+      "perUnitContains": "PER UNIT CONTAINS",
+      "totalDoses": "TOTAL DOSES",
+      "doses": "DOSES"
+    },
+    "disclaimer": "For analytical research and educational laboratory procedures only. Not intended for direct consumer therapeutic use."
   }
 }

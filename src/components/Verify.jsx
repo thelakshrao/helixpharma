@@ -290,13 +290,13 @@ export default function Verify() {
                   <div className="absolute inset-0 bg-linear-to-b from-black/10 via-black/20 to-black/70 z-0" />
 
                   <div className="relative z-10 flex flex-col items-center text-center w-full">
-                    <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-white/10 backdrop-blur-xl border border-white/30 flex items-center justify-center mb-3 sm:mb-4">
+                    <div className="w-22 h-22 sm:w-24 sm:h-24 rounded-full bg-white/10 backdrop-blur-xl border border-white/30 flex items-center justify-center mb-3 sm:mb-4">
                       <Image
                         src="/brand/healix-logo.png"
                         alt="Healix Pharma logo"
-                        width={48}
-                        height={48}
-                        className="object-contain sm:w-16 sm:h-16"
+                        width={78}
+                        height={78}
+                        className="object-contain sm:w-26 sm:h-26"
                       />
                     </div>
 

@@ -30,6 +30,28 @@
       "dosesPerVial": "Doses per vial",
       "exceedsSyringe": "This draw volume exceeds your selected syringe's capacity. Consider adding more BAC water to lower the concentration."
     },
+    "resultCard": {
+      "toHaveDose": "To have a dose of",
+      "pullSyringeTo": "pull the syringe to",
+      "units": "Units",
+      "syringeScale": "U-100 Insulin Syringe Scale",
+      "drawInstruction": "Draw volume up to line marker of {units} Units inside your U-100 syringe.",
+      "perUnitContains": "PER UNIT CONTAINS",
+      "totalDoses": "TOTAL DOSES",
+      "doses": "DOSES"
+    },
+    "calculator": {
+      "resultCard": {
+        "toHaveDose": "To have a dose of",
+        "pullSyringeTo": "pull the syringe to",
+        "units": "Units",
+        "syringeScale": "U-100 Insulin Syringe Scale",
+        "drawInstruction": "Draw volume up to line marker of {units} Units inside your U-100 syringe.",
+        "perUnitContains": "PER UNIT CONTAINS",
+        "totalDoses": "TOTAL DOSES",
+        "doses": "DOSES"
+      }
+    },
     "disclaimer": "For analytical research and educational laboratory procedures only. Not intended for direct consumer therapeutic use."
   }
 }
