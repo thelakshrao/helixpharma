@@ -63,6 +63,7 @@ function MiniSyringeIcon() {
 }
 
 function AnimatedSyringe({ units = 0, totalUnits = 100 }) {
+  const { t } = useLanguage();
   const percentage = Math.min(Math.max((units / totalUnits) * 100, 0), 100);
 
   return (
@@ -127,12 +128,14 @@ function AnimatedSyringe({ units = 0, totalUnits = 100 }) {
       </div>
 
       <p className="text-[10px] font-bold text-slate-500 mt-2 text-center">
-        U-100 Insulin Syringe Scale
+        {t("calculator.resultCard.syringeScale")}
       </p>
       {units > 0 && (
         <p className="text-[9px] text-slate-400 text-center mt-0.5">
-          Draw volume up to line marker of {units.toFixed(1)} Units inside your
-          U-100 syringe.
+          {t("calculator.resultCard.drawInstruction").replace(
+            "{units}",
+            units.toFixed(1)
+          )}
         </p>
       )}
     </div>
@@ -469,13 +472,14 @@ export default function PeptideCalculator() {
                   <div className="flex-1 flex flex-col justify-between">
                     <div>
                       <h3 className="text-xs sm:text-sm font-black text-slate-900 text-center mb-1">
-                        To have a dose of{" "}
+                        {t("calculator.resultCard.toHaveDose")}{" "}
                         <span className="underline decoration-slate-300">
                           {resolvedDose} {doseUnit}
                         </span>{" "}
-                        pull the syringe to{" "}
+                        {t("calculator.resultCard.pullSyringeTo")}{" "}
                         <span className="bg-blue-400 text-white px-2 py-0.5 rounded-md inline-block text-xs">
-                          {result.drawUnits.toFixed(1)} Units
+                          {result.drawUnits.toFixed(1)}{" "}
+                          {t("calculator.resultCard.units")}
                         </span>
                       </h3>
 
@@ -494,7 +498,7 @@ export default function PeptideCalculator() {
 
                       <div className="bg-slate-50 border border-slate-100 rounded-lg p-2 text-center">
                         <p className="text-[8px] font-bold tracking-wider uppercase text-slate-400">
-                          Per Unit Contains
+                          {t("calculator.resultCard.perUnitContains")}
                         </p>
                         <p className="text-xs font-black text-slate-900 mt-0.5">
                           {result.perUnitMcg.toFixed(1)} MCG
@@ -503,10 +507,11 @@ export default function PeptideCalculator() {
 
                       <div className="bg-slate-50 border border-slate-100 rounded-lg p-2 text-center">
                         <p className="text-[8px] font-bold tracking-wider uppercase text-slate-400">
-                          Total Doses
+                          {t("calculator.resultCard.totalDoses")}
                         </p>
                         <p className="text-xs font-black text-slate-900 mt-0.5">
-                          {Math.floor(result.dosesPerVial)} DOSES
+                          {Math.floor(result.dosesPerVial)}{" "}
+                          {t("calculator.resultCard.doses")}
                         </p>
                       </div>
                     </div>
