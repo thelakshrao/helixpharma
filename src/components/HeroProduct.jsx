@@ -91,12 +91,6 @@ export default function HeroProduct() {
 
           <div className="flex flex-wrap items-center gap-4 justify-start md:justify-end">
             <Link
-              href="/product#benefits"
-              className="text-sm font-medium text-slate-600 hover:text-blue-500 transition-colors"
-            >
-              {t("heroProduct.seeBenefits")}
-            </Link>
-            <Link
               href="/product"
               className="group inline-flex items-center gap-2 px-7 py-3.5 bg-blue-400 text-white text-sm font-semibold rounded-full shadow-lg shadow-blue-500/25 hover:bg-blue-500 hover:shadow-blue-500/40 transition-all"
             >
