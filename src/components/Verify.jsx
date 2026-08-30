@@ -24,10 +24,30 @@ const infoCardsMeta = [
 ];
 
 const resultMeta = {
-  valid: { icon: CheckCircle2, accent: "text-blue-600", badgeBg: "bg-blue-50", badgeBorder: "border-blue-100" },
-  already_used: { icon: AlertTriangle, accent: "text-amber-600", badgeBg: "bg-amber-50", badgeBorder: "border-amber-100" },
-  invalid: { icon: XCircle, accent: "text-red-600", badgeBg: "bg-red-50", badgeBorder: "border-red-100" },
-  error: { icon: XCircle, accent: "text-red-600", badgeBg: "bg-red-50", badgeBorder: "border-red-100" },
+  valid: {
+    icon: CheckCircle2,
+    accent: "text-blue-600",
+    badgeBg: "bg-blue-50",
+    badgeBorder: "border-blue-100",
+  },
+  already_used: {
+    icon: AlertTriangle,
+    accent: "text-amber-600",
+    badgeBg: "bg-amber-50",
+    badgeBorder: "border-amber-100",
+  },
+  invalid: {
+    icon: XCircle,
+    accent: "text-red-600",
+    badgeBg: "bg-red-50",
+    badgeBorder: "border-red-100",
+  },
+  error: {
+    icon: XCircle,
+    accent: "text-red-600",
+    badgeBg: "bg-red-50",
+    badgeBorder: "border-red-100",
+  },
 };
 
 export default function Verify() {
@@ -92,13 +112,16 @@ export default function Verify() {
 
   const isValid = status === "valid";
 
-  const verifiedOn = new Date().toLocaleString(lang === "th" ? "th-TH" : "en-US", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  const verifiedOn = new Date().toLocaleString(
+    lang === "th" ? "th-TH" : "en-US",
+    {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    },
+  );
 
   return (
     <section
@@ -188,7 +211,9 @@ export default function Verify() {
               disabled={loading}
               className="px-5 py-2.5 sm:px-6 sm:py-3 bg-white text-gray-900 text-xs sm:text-sm font-semibold rounded-xl hover:bg-gray-100 transition disabled:opacity-60 cursor-pointer"
             >
-              {loading ? t("verify.hero.checking") : t("verify.hero.verifyButton")}
+              {loading
+                ? t("verify.hero.checking")
+                : t("verify.hero.verifyButton")}
             </motion.button>
           </motion.form>
         </div>
@@ -290,13 +315,13 @@ export default function Verify() {
                   <div className="absolute inset-0 bg-linear-to-b from-black/10 via-black/20 to-black/70 z-0" />
 
                   <div className="relative z-10 flex flex-col items-center text-center w-full">
-                    <div className="w-22 h-22 sm:w-24 sm:h-24 rounded-full bg-white/10 backdrop-blur-xl border border-white/30 flex items-center justify-center mb-3 sm:mb-4">
+                    <div className="w-32 h-32 sm:w-28 sm:h-28 flex items-center justify-center mb-3 sm:mb-4 relative">
                       <Image
                         src="/brand/healix-logo.png"
                         alt="Healix Pharma logo"
-                        width={78}
-                        height={78}
-                        className="object-contain sm:w-26 sm:h-26"
+                        width={112}
+                        height={112}
+                        className="w-full h-full object-contain"
                       />
                     </div>
 
@@ -380,11 +405,16 @@ export default function Verify() {
                       <div
                         className={`w-9 h-9 sm:w-11 sm:h-11 rounded-full flex items-center justify-center border ${meta.badgeBg} ${meta.badgeBorder}`}
                       >
-                        <ResultIcon size={18} className={`${meta.accent} sm:w-5.5 sm:h-5.5`} />
+                        <ResultIcon
+                          size={18}
+                          className={`${meta.accent} sm:w-5.5 sm:h-5.5`}
+                        />
                       </div>
 
                       <div>
-                        <h2 className={`text-base sm:text-lg font-bold ${meta.accent}`}>
+                        <h2
+                          className={`text-base sm:text-lg font-bold ${meta.accent}`}
+                        >
                           {t(`verify.result.${status}.title`)}
                         </h2>
 
